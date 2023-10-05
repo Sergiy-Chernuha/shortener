@@ -30,4 +30,8 @@ public class URL {
 
     public URL(String shortURL) {
     }
+
+    public URL() {
+
+    }
 }
