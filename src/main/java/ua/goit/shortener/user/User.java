@@ -2,7 +2,7 @@ package ua.goit.shortener.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ua.goit.shortener.url.URL;
+import ua.goit.shortener.url.entity.URL;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ua.goit.shortener.url;
+package ua.goit.shortener.url.dto;
 
 import lombok.Data;
 
