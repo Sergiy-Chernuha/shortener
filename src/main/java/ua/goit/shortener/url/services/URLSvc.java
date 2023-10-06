@@ -1,6 +1,8 @@
-package ua.goit.shortener.url;
+package ua.goit.shortener.url.services;
 
 import org.springframework.stereotype.Service;
+import ua.goit.shortener.url.dto.UrlDTO;
+import ua.goit.shortener.url.services.URLService;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
