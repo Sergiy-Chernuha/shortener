@@ -1,4 +1,4 @@
-package ua.goit.shortener.user;
+package ua.goit.shortener.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

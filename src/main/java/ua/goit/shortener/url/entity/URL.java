@@ -2,7 +2,6 @@ package ua.goit.shortener.url.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ua.goit.shortener.user.User;
 
 import java.util.Date;
 
