@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <h1>Главная страница</h1>
+    <button id="login-button" class="login-button">Войти</button>
+</header>
+<main>
+    <section class="link-form">
+        <h2>Создать короткую ссылку</h2>
+        <form id="link-form">
+            <label for="original-url">Оригинальная ссылка:</label>
+            <input type="text" id="original-url" name="original-url" required>
+            <button type="submit">Создать</button>
+        </form>
+        <div id="validation-message" style="color: red;"></div>
+    </section>
+    <section class="link-list">
+        <h2>Список коротких ссылок</h2>
+        <ul id="link-list"></ul>
+    </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
