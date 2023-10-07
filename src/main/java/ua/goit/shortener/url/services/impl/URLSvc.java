@@ -1,4 +1,4 @@
-package ua.goit.shortener.url.services;
+package ua.goit.shortener.url.services.impl;
 
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
@@ -44,12 +44,11 @@ public class URLSvc implements URLService {
     }
 
     //генератор строки
-    // може його перенести в окремий клас????
     public String generateRandomString(int length) {
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomString = new StringBuilder();
-
         Random random = new Random();
+
         for (int i = 0; i < length; i++) {
             char randomChar = characters.charAt(random.nextInt(characters.length()));
             randomString.append(randomChar);
@@ -57,5 +56,4 @@ public class URLSvc implements URLService {
 
         return randomString.toString();
     }
-
 }
