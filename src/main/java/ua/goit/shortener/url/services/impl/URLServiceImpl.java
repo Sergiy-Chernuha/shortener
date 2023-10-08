@@ -10,7 +10,7 @@ import java.util.Random;
 import java.net.URL;
 
 @Service
-public class URLSvc implements URLService {
+public class URLServiceImpl implements URLService {
     @Override
     public String createShortURL(String originalURL) {
         // генерація посилання
