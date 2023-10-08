@@ -1,4 +1,4 @@
-// Функция для проверки валидности URL
+// Функція для перевірки валідності URL
 function isValidURL(url) {
     try {
         new URL(url);
@@ -8,25 +8,25 @@ function isValidURL(url) {
     }
 }
 
-// Функция, которая будет вызвана при отправке формы
+// Функція, яка буде визвана при відправці форми
 function submitLinkForm(event) {
-    event.preventDefault(); // Предотвращаем стандартное поведение формы (перезагрузку страницы)
+    event.preventDefault(); // Попереджуємо стандартну поведінку форми (перезавантаження стрінки)
 
-    // Получаем данные из формы
+    // Отримуємо дані з форми
     const originalUrl = document.getElementById('original-url').value;
 
-    // Проверяем валидность URL
+    // Перевіряємо валідність URL
     if (!isValidURL(originalUrl)) {
-        alert('Пожалуйста, введите корректный URL.');
+        alert('Будь-ласка, введіть коректний URL.');
         return;
     }
 
-    // Создаем объект данных для отправки на сервер
+    // Створюємо об'єкт даних для відправки на сервер
     const data = {
         originalUrl: originalUrl
     };
 
-    // Отправляем POST-запрос на сервер
+    // Відправляємо POST-запит на сервер
     fetch('/create-edit', {
         method: 'POST',
         headers: {
@@ -36,20 +36,20 @@ function submitLinkForm(event) {
     })
         .then(response => response.json())
         .then(data => {
-            // Обработка ответа от сервера
+            // Обробка відповіді від сервера
             if (data.shortUrl) {
-                alert('Короткая ссылка создана: ' + data.shortUrl);
-                // Дополнительная логика, например, перенаправление пользователя
+                alert('Коротке посилання створене: ' + data.shortUrl);
+                // Додаткова логика, наприклад, перенаправлення користувача
                 // window.location.href = '/create-edit';
             } else {
-                alert('Произошла ошибка при создании ссылки.');
+                alert('Виникла помилка при створенні посилання.');
             }
         })
         .catch(error => {
-            console.error('Ошибка:', error);
+            console.error('Помилка:', error);
         });
 }
 
-// Получаем форму и добавляем обработчик события на отправку
+// Отримуємо форму и додаємо обробник події на відправку
 const linkForm = document.getElementById('link-form');
 linkForm.addEventListener('submit', submitLinkForm);
