@@ -4,16 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
-import ua.goit.shortener.url.services.CrudUrlService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CrudUrlServiceImpl implements CrudUrlService {
+public class CrudUrlService implements ua.goit.shortener.url.services.CrudUrlService {
     private final URLRepository urlRepository;
     @Autowired
-    public CrudUrlServiceImpl(URLRepository urlRepository) {
+    public CrudUrlService(URLRepository urlRepository) {
         this.urlRepository = urlRepository;
     }
     @Override
@@ -25,7 +24,7 @@ public class CrudUrlServiceImpl implements CrudUrlService {
         return urlRepository.findById(shortURL);
     }
     @Override
-    public URL createURL(URL url) {
+    public URL saveURL(URL url) {
         return urlRepository.save(url);
     }
     @Override

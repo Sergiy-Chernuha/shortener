@@ -11,7 +11,7 @@ public interface CrudUrlService {
 
     Optional<URL> getURLByShortURL(String shortURL);
 
-    URL createURL(URL url);
+    URL saveURL(URL url);
 
     void deleteURL(String shortURL);
 

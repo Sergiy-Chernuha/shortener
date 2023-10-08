@@ -2,7 +2,6 @@ package ua.goit.shortener.url.services.impl;
 
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
-import ua.goit.shortener.url.services.URLService;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -10,7 +9,7 @@ import java.util.Random;
 import java.net.URL;
 
 @Service
-public class URLSvc implements URLService {
+public class URLService implements ua.goit.shortener.url.services.URLService {
     @Override
     public String createShortURL(String originalURL) {
         // генерація посилання
