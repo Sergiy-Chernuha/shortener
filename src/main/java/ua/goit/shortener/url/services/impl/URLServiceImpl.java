@@ -5,7 +5,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
 import ua.goit.shortener.url.services.URLService;
@@ -18,12 +17,12 @@ import java.util.Random;
 
 
 @Service
-public class URLSvc implements URLService {
+public class URLServiceImpl implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final URLRepository urlRepository;
 
     @Autowired
-    public URLSvc(URLRepository urlRepository) {
+    public URLServiceImpl(URLRepository urlRepository) {
         this.urlRepository = urlRepository;
     }
 

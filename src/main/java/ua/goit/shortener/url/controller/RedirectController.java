@@ -1,18 +1,16 @@
 package ua.goit.shortener.url.controller;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ua.goit.shortener.url.services.URLService;
-import ua.goit.shortener.url.services.impl.URLSvc;
+import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
 
 @Controller
 public class RedirectController {
-    private final URLSvc urlSvc;
+    private final URLServiceImpl urlSvc;
 
-    public RedirectController(URLSvc urlSvc) {
+    public RedirectController(URLServiceImpl urlSvc) {
         this.urlSvc = urlSvc;
     }
 
