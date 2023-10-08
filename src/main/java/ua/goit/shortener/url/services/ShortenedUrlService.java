@@ -38,7 +38,6 @@ public class ShortenedUrlService {
             URL updatedURL = existingURL.get();
             updatedURL.setLongURL(url.getLongURL());
             updatedURL.setCreateDate(url.getCreateDate());
-            updatedURL.setClicks(url.getClicks());
 
             return urlRepository.save(updatedURL);
         } else {
