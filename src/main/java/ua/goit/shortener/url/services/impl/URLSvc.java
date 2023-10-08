@@ -3,19 +3,29 @@ package ua.goit.shortener.url.services.impl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
+import ua.goit.shortener.url.entity.URL;
+import ua.goit.shortener.url.repositories.URLRepository;
 import ua.goit.shortener.url.services.URLService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Random;
-import java.net.URL;
+
 
 @Service
 public class URLSvc implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
+    private final URLRepository urlRepository;
+
+    @Autowired
+    public URLSvc(URLRepository urlRepository) {
+        this.urlRepository = urlRepository;
+    }
 
     @Override
     public boolean isValidURL(String originalURL) {
@@ -41,11 +51,10 @@ public class URLSvc implements URLService {
         return prefix + randomString;
     }
 
-
     @Override
     public boolean isValidShortURL(String shortURL) {
         try {
-            new URL(shortURL).toURI();
+            new java.net.URL(shortURL).toURI();
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
             return false;
@@ -59,6 +68,17 @@ public class URLSvc implements URLService {
     @Override
     public void incrementClickCount(String shortURL) {
 
+    }
+
+    @Override
+    public String getOriginalURL(String shortURL) {
+        List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
+        if (!urls.isEmpty()) {
+            URL findOriginalUrl = urls.get(0); // перший об'єкт зі списку
+            return findOriginalUrl.getLongURL();
+        } else {
+            return null;
+        }
     }
 
     //генератор строки

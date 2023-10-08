@@ -16,4 +16,6 @@ public interface URLService {
     // інфо по url
     void incrementClickCount(String shortURL);
     //лічильник переходів
+
+    String getOriginalURL(String shortUrl);
 }
