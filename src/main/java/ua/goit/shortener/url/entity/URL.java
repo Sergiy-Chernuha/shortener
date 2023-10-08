@@ -3,7 +3,7 @@ package ua.goit.shortener.url.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "URL")
@@ -17,13 +17,11 @@ public class URL {
     private String longURL;
 
     @Column(name = "CREATE_DATE")
-    private LocalDateTime createDate;
+    private Date createDate;
 
     @Column(name = "CLICKS_COUNT")
     private Integer clicks;
 
-    @Column(name = "USER_ID")
-    private Long user_id;
 
     public URL(String shortURL) {
     }
