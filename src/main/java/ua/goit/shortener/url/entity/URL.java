@@ -22,7 +22,6 @@ public class URL {
     @Column(name = "CLICKS_COUNT")
     private Integer clicks;
 
-
     public URL(String shortURL) {
     }
 
