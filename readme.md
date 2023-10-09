@@ -3,16 +3,15 @@ Spring Profiles:
 __________________________________________
 TO SET VALUES FOR ENVIRONMENT VARIABLES:
 
-spring.datasource.url=jdbc:postgresql://${DB_URL}
-spring.datasource.username=${DB_USERNAME}
-spring.datasource.password=${DB_PASSWORD}
-
+    spring.datasource.url=jdbc:postgresql://${DB_URL}
+    spring.datasource.username=${DB_USERNAME}
+    spring.datasource.password=${DB_PASSWORD}
 
 Environment variables:
-DB_URL - URL to Postgre data base;
-DB_USERNAME - Postgre data base username;
-DB_PASSWORD - Postgre data base user password
 
+    DB_URL - URL to Postgre data base;
+    DB_USERNAME - Postgre data base username;
+    DB_PASSWORD - Postgre data base user password.
 
 By default active Spring Profile is dev.
 to run in production  mode:
