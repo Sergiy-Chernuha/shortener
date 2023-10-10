@@ -35,6 +35,7 @@ public class URLServiceImpl implements URLService {
         Request request = new Request.Builder()
                 .url(originalURL)
                 .build();
+
         try (Response response = httpClient.newCall(request).execute()) {
             // якщо код 200 то все ок
             return response.isSuccessful();
@@ -48,6 +49,7 @@ public class URLServiceImpl implements URLService {
     public String saveShortURL(Long userId, String originalURL) {
         String shortURL = createShortURL(originalURL);
         URL url = new URL();
+
         url.setShortURL(shortURL);
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
@@ -73,6 +75,7 @@ public class URLServiceImpl implements URLService {
     public boolean isValidShortURL(String saveShortURL) {
         try {
             new java.net.URL(saveShortURL).toURI();
+
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
 
@@ -88,6 +91,7 @@ public class URLServiceImpl implements URLService {
     @Override
     public String getOriginalURL(String shortURL) {
         List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
+
         if (!urls.isEmpty()) {
             URL findOriginalUrl = urls.get(0); // перший об'єкт зі списку
             return findOriginalUrl.getLongURL();
@@ -101,8 +105,8 @@ public class URLServiceImpl implements URLService {
     public String generateRandomString(int length) {
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomString = new StringBuilder();
-
         Random random = new Random();
+
         for (int i = 0; i < length; i++) {
             char randomChar = characters.charAt(random.nextInt(characters.length()));
             randomString.append(randomChar);
