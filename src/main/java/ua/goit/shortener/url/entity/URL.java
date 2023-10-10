@@ -22,6 +22,9 @@ public class URL {
     @Column(name = "CLICKS_COUNT")
     private Integer clicks;
 
+    @Column(name = "EXPIRY_DATE")
+    private Date expiryDate;
+
     public URL(String shortURL) {
     }
 
