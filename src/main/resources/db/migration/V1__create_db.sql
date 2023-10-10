@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS USERS (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id bigint generated always as identity PRIMARY KEY,
     nick_name VARCHAR(255) NOT NULL,
     password VARCHAR(1024) NOT NULL
 );
