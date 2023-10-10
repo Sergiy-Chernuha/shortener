@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 import ua.goit.shortener.user.entity.User;
-import ua.goit.shortener.user.services.UserServicesImpl;
+import ua.goit.shortener.user.services.impl.UserServicesImpl;
 
 @SpringBootApplication
 public class MainApplication {

@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-
 @Service
 public class URLServiceImpl implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
@@ -99,7 +98,6 @@ public class URLServiceImpl implements URLService {
 
 
     //генератор строки
-    // може його перенести в окремий клас????
     public String generateRandomString(int length) {
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomString = new StringBuilder();

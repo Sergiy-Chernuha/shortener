@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
-
 @Controller
 public class RedirectController {
     private final URLServiceImpl urlService;
@@ -19,12 +18,12 @@ public class RedirectController {
     public String redirectToOriginalURL(@PathVariable String shortUrl, HttpServletResponse response) {
         if (urlService.isValidShortURL(shortUrl)) {
             String originalURL = urlService.getOriginalURL(shortUrl);
+
             if (originalURL != null) {
                 return "redirect:" + originalURL;
             }
         }
+
         return "redirect:/"; // Редірект на головну сторінку або обробка помилки
         }
     }
-
-
