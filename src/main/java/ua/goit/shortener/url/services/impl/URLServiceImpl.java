@@ -60,6 +60,7 @@ public class URLServiceImpl implements URLService {
 
         return shortURL;
     }
+
     @Override
     public String createShortURL(String originalURL) {
         // генерація посилання
@@ -76,6 +77,7 @@ public class URLServiceImpl implements URLService {
             new java.net.URL(saveShortURL).toURI();
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
+
             return false;
         }
     }
@@ -97,7 +99,6 @@ public class URLServiceImpl implements URLService {
     }
 
 
-
     //генератор строки
     // може його перенести в окремий клас????
     public String generateRandomString(int length) {
@@ -109,6 +110,7 @@ public class URLServiceImpl implements URLService {
             char randomChar = characters.charAt(random.nextInt(characters.length()));
             randomString.append(randomChar);
         }
+
         return randomString.toString();
     }
 }

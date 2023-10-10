@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import ua.goit.shortener.user.entity.User;
 
+
 import java.util.Date;
 
 @Entity
@@ -33,6 +34,5 @@ public class URL {
     }
 
     public URL() {
-    }
 
-}
+    }

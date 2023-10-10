@@ -7,7 +7,6 @@ import ua.goit.shortener.url.entity.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name = "USERS")
 @Data
@@ -24,6 +23,5 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<URL> urls = new ArrayList<>();
-
 
 }
