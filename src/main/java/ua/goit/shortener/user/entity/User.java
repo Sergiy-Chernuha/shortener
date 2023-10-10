@@ -19,8 +19,8 @@ public class User {
     @Column(name = "NICK_NAME")
     private String nickName;
 
-    @Column(name = "PASSWORLD")
-    private String passworld;
+    @Column(name = "PASSWORD")
+    private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<URL> urls = new ArrayList<>();

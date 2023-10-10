@@ -9,12 +9,12 @@ public interface URLService {
     //перевірка на валідність оригінального url
     String createShortURL(String originalURL);
     //створення короткого url
-
     boolean isValidShortURL(String shortURL);
     //перевірка на валідність короткого url
-
     void incrementClickCount(String shortURL);
     //лічильник переходів
-
     String getOriginalURL(String shortUrl);
+    //отримання оригінального юрл
+    String saveShortURL(Long userId, String originalURL);
+    //збереження у бд
 }

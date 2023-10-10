@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
 import ua.goit.shortener.url.services.URLService;
+import ua.goit.shortener.user.entity.User;
+import ua.goit.shortener.user.repositories.UsersRepository;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -21,9 +24,12 @@ public class URLServiceImpl implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final URLRepository urlRepository;
 
+    private final UsersRepository usersRepository;
+
     @Autowired
-    public URLServiceImpl(URLRepository urlRepository) {
+    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository) {
         this.urlRepository = urlRepository;
+        this.usersRepository = usersRepository;
     }
 
     @Override
@@ -41,6 +47,20 @@ public class URLServiceImpl implements URLService {
     }
 
     @Override
+    public String saveShortURL(Long userId, String originalURL) {
+        String shortURL = createShortURL(originalURL);
+        URL url = new URL();
+        url.setShortURL(shortURL);
+        url.setLongURL(originalURL);
+        url.setCreateDate(new Date()); //дата створення
+        url.setClicks(0); // кількість переходів
+        User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
+        url.setUser(user); // Призначити користувача URL
+        urlRepository.save(url);
+
+        return shortURL;
+    }
+    @Override
     public String createShortURL(String originalURL) {
         // генерація посилання
         String prefix = "https://shorter/t3/";
@@ -51,9 +71,9 @@ public class URLServiceImpl implements URLService {
     }
 
     @Override
-    public boolean isValidShortURL(String shortURL) {
+    public boolean isValidShortURL(String saveShortURL) {
         try {
-            new java.net.URL(shortURL).toURI();
+            new java.net.URL(saveShortURL).toURI();
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
             return false;
@@ -76,6 +96,8 @@ public class URLServiceImpl implements URLService {
         }
     }
 
+
+
     //генератор строки
     // може його перенести в окремий клас????
     public String generateRandomString(int length) {
@@ -87,8 +109,6 @@ public class URLServiceImpl implements URLService {
             char randomChar = characters.charAt(random.nextInt(characters.length()));
             randomString.append(randomChar);
         }
-
         return randomString.toString();
     }
-
 }

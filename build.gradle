@@ -26,6 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok:1.18.26'
 	runtimeOnly 'com.h2database:h2-mvstore:2.1.214'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -34,7 +35,9 @@ dependencies {
 // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
 	implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
 
-
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 }
 
 tasks.named('test') {
