@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.Getter;
 import ua.goit.shortener.user.entity.User;
 
-
 import java.util.Date;
 
 @Entity
@@ -30,9 +29,6 @@ public class URL {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    public URL(String shortURL) {
-    }
-
     public URL() {
-
     }
+}

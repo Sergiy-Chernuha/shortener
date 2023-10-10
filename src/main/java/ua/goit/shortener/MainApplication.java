@@ -1,21 +1,16 @@
 package ua.goit.shortener;
 
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 import ua.goit.shortener.user.entity.User;
-import ua.goit.shortener.user.repositories.UsersRepository;
 import ua.goit.shortener.user.services.UserServicesImpl;
 
 @SpringBootApplication
 public class MainApplication {
 
+//CLASS ONLY FOR TESTING!!!!
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(MainApplication.class, args);
 
@@ -32,7 +27,5 @@ public class MainApplication {
 
         String shortURL = urlService.saveShortURL(userId, originalURL);
         System.out.println("Short URL: " + shortURL);
-
-
     }
 }
