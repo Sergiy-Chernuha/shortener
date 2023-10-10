@@ -23,7 +23,7 @@ public class MainApplication {
         URLServiceImpl urlService = context.getBean(URLServiceImpl.class);
 
         String originalURL = "https://github.com/Sergiy-Chernuha/shortener/tree/unique_url_yuz";
-        Long userId = 2L;
+        Long userId = 1L;
 
         String shortURL = urlService.saveShortURL(userId, originalURL);
         System.out.println("Short URL: " + shortURL);

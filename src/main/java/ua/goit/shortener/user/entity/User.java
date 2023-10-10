@@ -21,6 +21,7 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<URL> urls = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<URL> urls = new ArrayList<>();
 }
