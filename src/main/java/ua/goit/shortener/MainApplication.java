@@ -1,5 +1,8 @@
 package ua.goit.shortener;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,17 +19,27 @@ public class MainApplication {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(MainApplication.class, args);
 
-//        UserServicesImpl userServices = context.getBean(UserServicesImpl.class);
-//        User user = new User();
-//        user.setNickName("user1");
-//        user.setPassword("123456");
-//        userServices.saveUser(user);
+        UserServicesImpl userServices = context.getBean(UserServicesImpl.class);
+        User user = new User();
+        user.setNickName("user2");
+        user.setPassword("1234567");
+        userServices.saveUser(user);
 
         URLServiceImpl urlService = context.getBean(URLServiceImpl.class);
 
-        String originalURL = "https://docs.google.com/document/d/1CmvPkcy-fo49BqlTwnC_iYBhj5KSmItM2V9Ps6lLtnI/edit";
-        Long userId = 1L;
+        String originalURL = "https://github.com/Sergiy-Chernuha/shortener/tree/unique_url_yuz";
+        Long userId = 2L;
 
-        System.out.println(urlService.saveShortURL(userId, originalURL));
+        String shortURL = urlService.saveShortURL(userId, originalURL);
+        System.out.println("Short URL: " + shortURL);
+
+        //редірект
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet httpGet = new HttpGet(shortURL);
+            httpClient.execute(httpGet);
+            System.out.println("Redirected to: " + httpGet.getURI());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
