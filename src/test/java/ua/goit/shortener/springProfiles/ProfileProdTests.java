@@ -19,23 +19,16 @@ class ProfileProdTests {
 
     @Test
     void profileIsProd() {
-
-
-        //WHEN
-
         String expected = environment.getProperty("test_prop");
         String actual = "PROD";
 
-        //THEN
         Assertions.assertEquals(expected, actual);
-        System.out.println();
-        System.out.println("Profile is PROD");
-
     }
 
     @Test
     void profileIsNotProd() {
-        Assert.isTrue(Objects.equals(environment.getProperty("test_prop"), "PROD"), "INCORRECT ENVIRONMENT CONFIG");
-    }
+        String actual = environment.getProperty("test_prop");
 
+        Assert.isTrue(Objects.equals(actual, "PROD"), "INCORRECT ENVIRONMENT CONFIG");
+    }
 }
