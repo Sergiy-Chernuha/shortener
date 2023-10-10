@@ -33,13 +33,13 @@ public class MainApplication {
         String shortURL = urlService.saveShortURL(userId, originalURL);
         System.out.println("Short URL: " + shortURL);
 
-        //редірект
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet httpGet = new HttpGet(shortURL);
-            httpClient.execute(httpGet);
-            System.out.println("Redirected to: " + httpGet.getURI());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        //редірект
+//        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+//            HttpGet httpGet = new HttpGet(shortURL);
+//            httpClient.execute(httpGet);
+//            System.out.println("Redirected to: " + httpGet.getURI());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

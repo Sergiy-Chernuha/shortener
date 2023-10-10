@@ -23,7 +23,6 @@ import java.util.Random;
 public class URLServiceImpl implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final URLRepository urlRepository;
-
     private final UsersRepository usersRepository;
 
     @Autowired
