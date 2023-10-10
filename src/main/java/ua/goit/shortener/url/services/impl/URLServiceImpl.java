@@ -1,16 +1,28 @@
 package ua.goit.shortener.url.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
+import ua.goit.shortener.url.entity.URL;
+import ua.goit.shortener.url.repositories.URLRepository;
 import ua.goit.shortener.url.services.URLService;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Random;
-import java.net.URL;
+
 
 @Service
 public class URLServiceImpl implements URLService {
+
+    private final URLRepository urlRepository;
+
+    @Autowired
+    public URLServiceImpl(URLRepository urlRepository) {
+        this.urlRepository = urlRepository; }
+
     @Override
     public String createShortURL(String originalURL) {
         // генерація посилання
@@ -18,13 +30,24 @@ public class URLServiceImpl implements URLService {
         int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
         String randomString = generateRandomString(randomLength);
 
-        return prefix + randomString;
+        String shortURL =  prefix + randomString;
+
+        // Перевірка, чи такий короткий URL вже існує в базі даних
+        List<URL> existingURLs = urlRepository.findByShortURLContaining(shortURL);
+
+        if (existingURLs.isEmpty()) {
+            // Якщо короткий URL ще не існує, то використовуємо його
+            return shortURL;
+        } else {
+            // Якщо короткий URL вже існує, генеруємо новий
+            return createShortURL(originalURL);
+        }
     }
 
     @Override
     public boolean isValidURL(String shortURL) {
         try {
-            new URL(shortURL).toURI();
+            new java.net.URL(shortURL).toURI();
             return true;
         } catch (URISyntaxException exception) {
             return false;
