@@ -81,10 +81,7 @@ public class URLServiceImpl implements URLService {
             return false;
         }
     }
-    @Override
-    public UrlDTO getURLInfo(String shortURL) {
-        return null;
-    }
+
     @Override
     public void incrementClickCount(String shortURL) {
 

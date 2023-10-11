@@ -1,4 +1,5 @@
 package ua.goit.shortener.url.controller;
+//Клас Діми
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,6 +9,7 @@ import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
 import ua.goit.shortener.url.services.URLService;
+import ua.goit.shortener.url.services.impl.CrudUrlServiceImpl;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
 import java.util.List;
@@ -17,11 +19,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/urls")
 public class UrlController {
-    private final CrudUrlService crudUrlService;
+    private final CrudUrlServiceImpl crudUrlService;
     private final URLServiceImpl urlServiceImpl;
 
     @Autowired
-    public UrlController(CrudUrlService crudUrlService, URLServiceImpl urlServiceImpl) {
+    public UrlController(CrudUrlServiceImpl crudUrlService, URLServiceImpl urlServiceImpl) {
         this.crudUrlService = crudUrlService;
         this.urlServiceImpl = urlServiceImpl;
     }
@@ -71,6 +73,20 @@ public class UrlController {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/update/{shortURL}")
+    public ResponseEntity<String> updateURL(@PathVariable String shortURL, @RequestBody String newOriginalURL) {
+        if (urlServiceImpl.isValidURL(newOriginalURL)) {
+            boolean updated = urlServiceImpl.updateShortURL(shortURL);
+            if (updated) {
+                return ResponseEntity.ok("URL updated successfully");
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.badRequest().body("Error");
         }
     }
 
