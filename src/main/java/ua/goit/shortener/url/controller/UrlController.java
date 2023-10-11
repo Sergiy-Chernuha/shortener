@@ -1,12 +1,14 @@
 package ua.goit.shortener.url.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
 import ua.goit.shortener.url.services.URLService;
+import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,12 +18,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/urls")
 public class UrlController {
     private final CrudUrlService crudUrlService;
-    private final URLService urlService;
+    private final URLServiceImpl urlServiceImpl;
 
     @Autowired
-    public UrlController(CrudUrlService crudUrlService, URLService urlService) {
+    public UrlController(CrudUrlService crudUrlService, URLServiceImpl urlServiceImpl) {
         this.crudUrlService = crudUrlService;
-        this.urlService = urlService;
+        this.urlServiceImpl = urlServiceImpl;
     }
 
     @GetMapping("/active")
@@ -43,7 +45,7 @@ public class UrlController {
 
     @GetMapping("/info/{shortURL}")
     public ResponseEntity<UrlDTO> getURLInfo(@PathVariable String shortURL) {
-        UrlDTO urlInfo = urlService.getURLInfo(shortURL);
+        UrlDTO urlInfo = urlServiceImpl.getURLInfo(shortURL);
         if (urlInfo != null) {
             return ResponseEntity.ok(urlInfo);
         } else {
@@ -53,8 +55,8 @@ public class UrlController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createShortURL(@RequestBody String originalURL) {
-        if (urlService.isValidURL(originalURL)) {
-            String shortURL = urlService.createShortURL(originalURL);
+        if (urlServiceImpl.isValidURL(originalURL)) {
+            String shortURL = urlServiceImpl.createShortURL(originalURL);
             return ResponseEntity.ok(shortURL);
         } else {
             return ResponseEntity.badRequest().body("Недійсний URL");

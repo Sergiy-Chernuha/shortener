@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import lombok.Getter;
-import ua.goit.shortener.user.entity.User;
 
 import java.util.Date;
 
@@ -18,7 +16,6 @@ public class URL {
     @Column(name = "SHORT_URL")
     private String shortURL;
 
-    @Getter
     @Column(name = "LONG_URL")
     private String longURL;
 
@@ -73,12 +70,5 @@ public class URL {
     // Сеттер для clickCount
     public void setClickCount(Integer clickCount) {
         this.clickCount = clickCount;
-
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User user;
-
-    public URL() {
-
     }
 }
