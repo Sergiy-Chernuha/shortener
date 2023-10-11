@@ -6,4 +6,6 @@ import ua.goit.shortener.user.entity.User;
 @Service
 public interface UserServices {
     void saveUser(User user);
+
+    void deleteUser(Long id);
 }
