@@ -5,6 +5,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
 import ua.goit.shortener.url.services.URLService;
@@ -82,7 +83,10 @@ public class URLServiceImpl implements URLService {
             return false;
         }
     }
-
+    @Override
+    public UrlDTO getURLInfo(String shortURL) {
+        return null;
+    }
     @Override
     public void incrementClickCount(String shortURL) {
 
