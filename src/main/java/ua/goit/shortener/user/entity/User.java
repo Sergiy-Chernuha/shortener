@@ -7,7 +7,6 @@ import ua.goit.shortener.url.entity.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name = "USERS")
 @Data
@@ -25,6 +24,4 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private List<URL> urls = new ArrayList<>();
-
-
 }
