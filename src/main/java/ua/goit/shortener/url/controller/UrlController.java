@@ -1,4 +1,4 @@
-package ua.goit.shortener.url;
+package ua.goit.shortener.url.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
