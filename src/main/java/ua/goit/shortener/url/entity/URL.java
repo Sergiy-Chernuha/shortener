@@ -1,10 +1,10 @@
 package ua.goit.shortener.url.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
+import ua.goit.shortener.user.entity.User;
 
 import java.util.Date;
 
@@ -12,18 +12,32 @@ import java.util.Date;
 @Table(name = "URL")
 @Data
 public class URL {
+    // Геттер для shortURL
+    @Getter
     @Id
     @Column(name = "SHORT_URL")
     private String shortURL;
 
+    // Геттер для longURL
+    @Getter
     @Column(name = "LONG_URL")
     private String longURL;
 
+    // Геттер для createDate
+    @Getter
     @Column(name = "CREATE_DATE")
     private Date createDate;
 
+    // Геттер для clickCount
+    @Getter
     @Column(name = "CLICKS_COUNT")
     private Integer clickCount;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+    @jakarta.persistence.Id
+    private Long id;
 
     public URL(String shortURL) {
         this.shortURL = shortURL;
@@ -32,19 +46,9 @@ public class URL {
     public URL() {
     }
 
-    // Геттер для shortURL
-    public String getShortURL() {
-        return shortURL;
-    }
-
     // Сеттер для shortURL
     public void setShortURL(String shortURL) {
         this.shortURL = shortURL;
-    }
-
-    // Геттер для longURL
-    public String getLongURL() {
-        return longURL;
     }
 
     // Сеттер для longURL
@@ -52,23 +56,14 @@ public class URL {
         this.longURL = longURL;
     }
 
-    // Геттер для createDate
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     // Сеттер для createDate
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    // Геттер для clickCount
-    public Integer getClickCount() {
-        return clickCount;
     }
 
     // Сеттер для clickCount
     public void setClickCount(Integer clickCount) {
         this.clickCount = clickCount;
     }
+
 }
