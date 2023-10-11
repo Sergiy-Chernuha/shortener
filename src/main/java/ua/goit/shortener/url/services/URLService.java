@@ -10,6 +10,9 @@ public interface URLService {
     String createShortURL(String originalURL);
     //створення короткого url
     boolean isValidShortURL(String shortURL);
+
+    UrlDTO getURLInfo(String shortURL);
+
     //перевірка на валідність короткого url
     void incrementClickCount(String shortURL);
     //лічильник переходів
