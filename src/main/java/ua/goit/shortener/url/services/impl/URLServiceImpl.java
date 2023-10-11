@@ -54,7 +54,7 @@ public class URLServiceImpl implements URLService {
         url.setShortURL(shortURL);
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
-        url.setClickCount(0); // кількість переходів
+        url.setClicks(0); // кількість переходів
         User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
         url.setUser(user); // Призначити користувача URL
         urlRepository.save(url);
