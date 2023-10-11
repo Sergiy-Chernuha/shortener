@@ -1,10 +1,11 @@
 package ua.goit.shortener.url.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
+
 
 @Controller
 public class RedirectController {
@@ -14,16 +15,14 @@ public class RedirectController {
         this.urlService = urlService;
     }
 
-    @GetMapping("/{shortUrl}")
-    public String redirectToOriginalURL(@PathVariable String shortUrl, HttpServletResponse response) {
-        if (urlService.isValidShortURL(shortUrl)) {
-            String originalURL = urlService.getOriginalURL(shortUrl);
+    @RequestMapping("/{shortUrl}")
+    public ModelAndView redirectFromShortUrl(@PathVariable String shortUrl) {
+        String originalURL = urlService.getOriginalURL(shortUrl);
 
-            if (originalURL != null) {
-                return "redirect:" + originalURL;
-            }
-        }
-
-        return "redirect:/"; // Редірект на головну сторінку або обробка помилки
+        if (originalURL != null) {
+            return new ModelAndView("redirect:" + originalURL);
+        } else {
+            return new ModelAndView("not_found"); // Потрібно створити сторінку not_found.html
         }
     }
+}

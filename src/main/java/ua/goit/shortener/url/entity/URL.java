@@ -28,7 +28,8 @@ public class URL {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-
+    public URL(String shortURL) {
+    }
     public URL() {
     }
 }

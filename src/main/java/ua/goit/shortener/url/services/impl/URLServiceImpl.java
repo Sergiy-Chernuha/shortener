@@ -5,6 +5,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
 import ua.goit.shortener.url.services.URLService;
@@ -35,7 +36,6 @@ public class URLServiceImpl implements URLService {
         Request request = new Request.Builder()
                 .url(originalURL)
                 .build();
-
         try (Response response = httpClient.newCall(request).execute()) {
             // якщо код 200 то все ок
             return response.isSuccessful();
@@ -49,12 +49,11 @@ public class URLServiceImpl implements URLService {
     public String saveShortURL(Long userId, String originalURL) {
         String shortURL = createShortURL(originalURL);
         URL url = new URL();
-
         url.setShortURL(shortURL);
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
         url.setClicks(0); // кількість переходів
-        User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
+        User user = usersRepository.getOne(userId); // Отримати користувача за ідентифікатором
         url.setUser(user); // Призначити користувача URL
         urlRepository.save(url);
 
@@ -113,5 +112,33 @@ public class URLServiceImpl implements URLService {
         }
 
         return randomString.toString();
+    }
+    @Override
+    public UrlDTO getURLInfo(String shortURL) {
+        URL url = urlRepository.findByShortURL(shortURL);
+        if (url != null) {
+            UrlDTO urlDTO = new UrlDTO();
+            urlDTO.setShortURL(url.getShortURL());
+            urlDTO.setOriginalURL(url.getLongURL());
+            urlDTO.setCreateDate(url.getCreateDate());
+            urlDTO.setClickCount(url.getClicks());
+            return urlDTO;
+        } else {
+
+            return null;
+        }
+    }
+
+    @Override
+    public boolean updateShortURL(String shortURL) {
+        List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
+        if (!urls.isEmpty()) {
+            URL foundOriginalUrl = urls.get(0);
+            foundOriginalUrl.setCreateDate(new Date());
+            urlRepository.save(foundOriginalUrl);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
