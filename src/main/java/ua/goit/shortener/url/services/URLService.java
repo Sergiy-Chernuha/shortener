@@ -20,4 +20,9 @@ public interface URLService {
     //отримання оригінального юрл
     String saveShortURL(Long userId, String originalURL);
     //збереження у бд
+
+    // встановлення терміну дії короткого url
+    void setExpiryShortURL(URL url);
+    // перевірка терміну дії короткого URL
+    String checkShortURLExpiry(String shortURL);
 }
