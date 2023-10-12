@@ -9,7 +9,7 @@ import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
 import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.user.entity.User;
-import ua.goit.shortener.user.repositories.UsersRepository;
+import ua.goit.shortener.user.repositories.UserRepository;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,12 +22,12 @@ import java.util.Random;
 public class URLServiceImpl implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final URLRepository urlRepository;
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository) {
+    public URLServiceImpl(URLRepository urlRepository, UserRepository userRepository) {
         this.urlRepository = urlRepository;
-        this.usersRepository = usersRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class URLServiceImpl implements URLService {
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
         url.setClicks(0); // кількість переходів
-        User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
+        User user = userRepository.getOne(userId); // Отримати користувача за ідентифікатором
         url.setUser(user); // Призначити користувача URL
         urlRepository.save(url);
 
