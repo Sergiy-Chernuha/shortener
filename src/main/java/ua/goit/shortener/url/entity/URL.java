@@ -22,6 +22,9 @@ public class URL {
     @Column(name = "CREATE_DATE")
     private Date createDate;
 
+    @Column(name = "EXPIRY_DATE")
+    private Date expiryDate;
+
     @Column(name = "CLICKS_COUNT")
     private Integer clicks;
 
