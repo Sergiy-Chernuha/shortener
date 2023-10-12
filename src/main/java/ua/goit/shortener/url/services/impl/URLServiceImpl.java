@@ -124,7 +124,6 @@ public class URLServiceImpl implements URLService {
             urlDTO.setClickCount(url.getClicks());
             return urlDTO;
         } else {
-
             return null;
         }
     }

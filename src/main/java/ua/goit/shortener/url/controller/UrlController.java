@@ -1,6 +1,7 @@
 package ua.goit.shortener.url.controller;
 //Клас Діми
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.url.services.impl.CrudUrlServiceImpl;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +39,7 @@ public class UrlController {
         List<UrlDTO> urlDTOs = activeUrls.stream().map(this::mapToDTO).collect(Collectors.toList());
         return ResponseEntity.ok(urlDTOs);
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<List<UrlDTO>> getAllURLs() {

@@ -20,8 +20,6 @@ public interface URLService {
     //отримання оригінального юрл
     String saveShortURL(Long userId, String originalURL);
 
-    UrlDTO getURLInfo(String shortURL);
-
     boolean updateShortURL(String shortURL);
     //збереження у бд
 }
