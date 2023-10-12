@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -24,11 +25,13 @@ public class URLServiceImpl implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final URLRepository urlRepository;
     private final UsersRepository usersRepository;
+    private final CrudUrlServiceImpl crudUrlService;
 
     @Autowired
-    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository) {
+    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository,CrudUrlServiceImpl crudUrlService) {
         this.urlRepository = urlRepository;
         this.usersRepository = usersRepository;
+        this.crudUrlService = crudUrlService;
     }
 
     @Override
@@ -89,10 +92,16 @@ public class URLServiceImpl implements URLService {
     }
     @Override
     public void incrementClickCount(String shortURL) {
-
+        Optional<URL> urlByShortURL = crudUrlService.getURLByShortURL(shortURL);
+        if(urlByShortURL.isPresent()) {
+            URL url = urlByShortURL.get();
+            Integer clickCount = url.getClickCount();
+            clickCount++;
+            url.setClickCount(clickCount);
+            crudUrlService.updateURL(url);
+        }
     }
-
-    @Override
+        @Override
     public String getOriginalURL(String shortURL) {
         List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
 
