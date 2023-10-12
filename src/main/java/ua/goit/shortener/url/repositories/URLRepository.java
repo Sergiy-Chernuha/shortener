@@ -10,4 +10,6 @@ import java.util.List;
 public interface URLRepository extends JpaRepository<URL, String> {
     List<URL> findByShortURLContaining(String shortURL);
 
+    URL findByShortURL(String shortURL);
+
 }
