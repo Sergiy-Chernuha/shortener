@@ -30,7 +30,7 @@ public class UrlController {
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
         List<URL> activeUrls = crudUrlService.getAllURLs()
                 .stream()
-                .filter(url -> url.getClicks() > 0).toList();
+                .filter(url -> url.getClickCount() > 0).toList();
 
         List<UrlDTO> urlDTOs = activeUrls.stream().map(this::mapToDTO).collect(Collectors.toList());
         return ResponseEntity.ok(urlDTOs);
@@ -79,7 +79,7 @@ public class UrlController {
         dto.setShortURL(url.getShortURL());
         dto.setOriginalURL(url.getLongURL());
         dto.setCreateDate(url.getCreateDate());
-        dto.setClickCount(url.getClicks());
+        dto.setClickCount(url.getClickCount());
         return dto;
     }
 }
