@@ -10,15 +10,17 @@ import ua.goit.shortener.user.services.impl.UserServicesImpl;
 @SpringBootApplication
 public class MainApplication {
 
-//CLASS ONLY FOR TESTING!!!!
+    //CLASS ONLY FOR TESTING!!!!
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(MainApplication.class, args);
 
-//        UserServicesImpl userServices = context.getBean(UserServicesImpl.class);
-//        User user = new User();
-//        user.setNickName("user2");
-//        user.setPassword("1234567");
-//        userServices.saveUser(user);
+        UserServicesImpl userServices = context.getBean(UserServicesImpl.class);
+        User user = new User();
+        user.setNickName("user2");
+        user.setPassword("1234567");
+        user.setEmail("sdfvsv@gmail.com");
+        user.setRole("user");
+        userServices.saveUser(user);
 
         URLServiceImpl urlService = context.getBean(URLServiceImpl.class);
 
