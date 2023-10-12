@@ -83,6 +83,32 @@ public class URLServiceImpl implements URLService {
             return false;
         }
     }
+
+    @Override
+    public void setExpiryShortURL(URL url) {
+        // Встановлюємо термін придатності на 2 доби від поточної дати створення
+        LocalDateTime expiryDate = LocalDateTime.ofInstant(url.getCreateDate().toInstant(), ZoneId.systemDefault()).plusDays(2);
+        url.setExpiryDate(Date.from(expiryDate.atZone(ZoneId.systemDefault()).toInstant()));
+    }
+
+    @Override
+    public String checkShortURLExpiry(String shortURL) {
+        URL url = urlRepository.findByShortURL(shortURL); // Отримати об'єкт URL за коротким посиланням
+
+        if (url != null) {
+            Date expiryDate = url.getExpiryDate();
+            Date currentDate = new Date();
+
+            if (expiryDate != null && currentDate.after(expiryDate)) {
+                return "Це посилання більше не активне.";
+            } else {
+                return url.getLongURL();
+            }
+        } else {
+            return "Посилання не знайдено.";
+        }
+    }
+    
     @Override
     public UrlDTO getURLInfo(String shortURL) {
         return null;
