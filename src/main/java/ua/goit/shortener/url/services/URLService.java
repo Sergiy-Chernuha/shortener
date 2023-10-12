@@ -12,6 +12,7 @@ public interface URLService {
     boolean isValidShortURL(String shortURL);
 
     UrlDTO getURLInfo(String shortURL);
+
     //перевірка на валідність короткого url
     void incrementClickCount(String shortURL);
     //лічильник переходів
