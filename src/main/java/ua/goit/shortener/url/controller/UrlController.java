@@ -74,11 +74,25 @@ public class UrlController {
         }
     }
 
+    @GetMapping("/{shortURL}")
+    public ResponseEntity<String> checkShortURLExpiry(@PathVariable String shortURL) {
+        String longURL = urlServiceImpl.checkShortURLExpiry(shortURL);
+
+        if (longURL != null) {
+            // Перенаправлення на довгу URL-адресу
+            return new ResponseEntity<>(HttpStatus.FOUND);
+        } else {
+            // Обробка випадку, коли коротку URL-адресу не знайдено або її термін дії закінчився
+            return new ResponseEntity<>("Коротка URL-адреса не знайдена або термін дії минув", HttpStatus.NOT_FOUND);
+        }
+    }
+
     private UrlDTO mapToDTO(URL url) {
         UrlDTO dto = new UrlDTO();
         dto.setShortURL(url.getShortURL());
         dto.setOriginalURL(url.getLongURL());
         dto.setCreateDate(url.getCreateDate());
+        dto.setExpiryDate(url.getExpiryDate());
         dto.setClickCount(url.getClicks());
         return dto;
     }
