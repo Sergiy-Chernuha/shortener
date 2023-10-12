@@ -17,7 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(name = "nick-name")
+    @Column(name = "nick_name")
     private String nickName;
 
 
@@ -30,9 +30,6 @@ public class User {
 
     @Column(name = "role")
     private String role;
-
-//    @Column(name = "ban")
-//    private Boolean enabled;
 
     @Column(name = "email")
     private String email;

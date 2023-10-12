@@ -1,6 +1,7 @@
 package ua.goit.shortener.user.dto;
 
 import lombok.Data;
+
 import java.util.Map;
 
 @Data
