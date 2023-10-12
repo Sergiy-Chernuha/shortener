@@ -28,7 +28,7 @@ public class URLServiceImpl implements URLService {
     private final CrudUrlServiceImpl crudUrlService;
 
     @Autowired
-    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository,CrudUrlServiceImpl crudUrlService) {
+    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository, CrudUrlServiceImpl crudUrlService) {
         this.urlRepository = urlRepository;
         this.usersRepository = usersRepository;
         this.crudUrlService = crudUrlService;
@@ -86,14 +86,17 @@ public class URLServiceImpl implements URLService {
             return false;
         }
     }
+
     @Override
     public UrlDTO getURLInfo(String shortURL) {
         return null;
     }
+
     @Override
     public void incrementClickCount(String shortURL) {
         Optional<URL> urlByShortURL = crudUrlService.getURLByShortURL(shortURL);
-        if(urlByShortURL.isPresent()) {
+
+        if (urlByShortURL.isPresent()) {
             URL url = urlByShortURL.get();
             Integer clickCount = url.getClickCount();
             clickCount++;
@@ -101,7 +104,8 @@ public class URLServiceImpl implements URLService {
             crudUrlService.updateURL(url);
         }
     }
-        @Override
+
+    @Override
     public String getOriginalURL(String shortURL) {
         List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
 
@@ -112,7 +116,6 @@ public class URLServiceImpl implements URLService {
             return null;
         }
     }
-
 
     //генератор строки
     public String generateRandomString(int length) {
