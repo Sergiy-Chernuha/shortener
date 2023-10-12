@@ -2,6 +2,8 @@ package ua.goit.shortener.url.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import ua.goit.shortener.user.entity.User;
 
 import java.util.Date;
 
@@ -13,6 +15,7 @@ public class URL {
     @Column(name = "SHORT_URL")
     private String shortURL;
 
+    @Getter
     @Column(name = "LONG_URL")
     private String longURL;
 
@@ -22,10 +25,10 @@ public class URL {
     @Column(name = "CLICKS_COUNT")
     private Integer clicks;
 
-    public URL(String shortURL) {
-    }
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     public URL() {
-
     }
 }
