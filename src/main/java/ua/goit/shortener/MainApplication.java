@@ -1,16 +1,16 @@
-package ua.goit.shortener;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import ua.goit.shortener.url.services.impl.URLServiceImpl;
-import ua.goit.shortener.user.entity.User;
-import ua.goit.shortener.user.services.impl.UserServicesImpl;
-
+//package ua.goit.shortener;
+//
+//import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.context.ApplicationContext;
+//import ua.goit.shortener.url.services.impl.URLServiceImpl;
+//import ua.goit.shortener.user.entity.User;
+//import ua.goit.shortener.user.services.impl.UserServicesImpl;
+//
 //@SpringBootApplication
 //public class MainApplication {
 //
-////CLASS ONLY FOR TESTING!!!!
+//    //CLASS ONLY FOR TESTING!!!!
 //    public static void main(String[] args) {
 //        ApplicationContext context = SpringApplication.run(MainApplication.class, args);
 //
@@ -18,6 +18,8 @@ import ua.goit.shortener.user.services.impl.UserServicesImpl;
 //        User user = new User();
 //        user.setNickName("user2");
 //        user.setPassword("1234567");
+//        user.setEmail("sdfvsv@gmail.com");
+//        user.setRole("user");
 //        userServices.saveUser(user);
 //
 //        URLServiceImpl urlService = context.getBean(URLServiceImpl.class);
