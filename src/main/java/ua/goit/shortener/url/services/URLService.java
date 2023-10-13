@@ -3,9 +3,11 @@ package ua.goit.shortener.url.services;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
 
+import java.io.IOException;
+
 @Service
 public interface URLService {
-    boolean isValidURL(String originalURL);
+    boolean isValidURL(String originalURL) throws IOException, InterruptedException;
     //перевірка на валідність оригінального url
     String createShortURL(String originalURL);
     //створення короткого url
@@ -19,5 +21,7 @@ public interface URLService {
     String getOriginalURL(String shortUrl);
     //отримання оригінального юрл
     String saveShortURL(Long userId, String originalURL);
+
+    boolean updateShortURL(String shortURL);
     //збереження у бд
 }
