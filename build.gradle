@@ -33,15 +33,10 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core:9.20.0'
 	implementation 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-    implementation 'io.jsonwebtoken:jjwt-api:0.12.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.2'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'org.springframework.boot:spring-boot-devtools:3.1.4'
     testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
-    implementation 'com.sun.xml.bind:jaxb-impl:4.0.3'
-    implementation 'com.sun.xml.bind:jaxb-core:4.0.3'
 // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
 // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient

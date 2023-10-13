@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/shortener")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
 
@@ -45,7 +45,7 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> authUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager
@@ -68,7 +68,7 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/registarion")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
 
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
