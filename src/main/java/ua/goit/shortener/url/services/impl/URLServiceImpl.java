@@ -1,7 +1,5 @@
 package ua.goit.shortener.url.services.impl;
 
-import okhttp3.OkHttpClient;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
@@ -53,6 +51,7 @@ public class URLServiceImpl implements URLService {
     public String saveShortURL(Long userId, String originalURL) {
         String shortURL = createShortURL(originalURL);
         URL url = new URL();
+
         url.setShortURL(shortURL);
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
@@ -126,12 +125,15 @@ public class URLServiceImpl implements URLService {
     @Override
     public UrlDTO getURLInfo(String shortURL) {
         URL url = urlRepository.findByShortURL(shortURL);
+
         if (url != null) {
             UrlDTO urlDTO = new UrlDTO();
+
             urlDTO.setShortURL(url.getShortURL());
             urlDTO.setOriginalURL(url.getLongURL());
             urlDTO.setCreateDate(url.getCreateDate());
             urlDTO.setClickCount(url.getClickCount());
+
             return urlDTO;
         } else {
             return null;
@@ -141,10 +143,12 @@ public class URLServiceImpl implements URLService {
     @Override
     public boolean updateShortURL(String shortURL) {
         List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
+
         if (!urls.isEmpty()) {
             URL foundOriginalUrl = urls.get(0);
             foundOriginalUrl.setCreateDate(new Date());
             urlRepository.save(foundOriginalUrl);
+
             return true;
         } else {
             return false;

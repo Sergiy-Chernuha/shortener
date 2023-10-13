@@ -20,25 +20,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/urls")
 public class UrlController {
-    private final CrudUrlServiceImpl crudUrlService;
+    private final CrudUrlService crudUrlService;
     private final URLServiceImpl urlServiceImpl;
 
     @Autowired
-    public UrlController(CrudUrlServiceImpl crudUrlService, URLServiceImpl urlServiceImpl) {
+    public UrlController(CrudUrlService crudUrlService, URLServiceImpl urlServiceImpl) {
         this.crudUrlService = crudUrlService;
         this.urlServiceImpl = urlServiceImpl;
     }
 
     @GetMapping("/active")
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
-        List<URL> activeUrls = (List<URL>) crudUrlService.getAllURLs()
-                .stream()
-                .toList();
-
+        List<URL> activeUrls = crudUrlService.getAllURLs();
         List<UrlDTO> urlDTOs = activeUrls.stream().map(this::mapToDTO).collect(Collectors.toList());
+
         return ResponseEntity.ok(urlDTOs);
     }
-
 
     @GetMapping("/all")
     public ResponseEntity<List<UrlDTO>> getAllURLs() {
@@ -69,9 +66,11 @@ public class UrlController {
 
     @DeleteMapping("/delete/shorter/t3/{shortURL}")
     public ResponseEntity<Void> deleteURL(@PathVariable String shortURL) {
-        Optional<URL> existingURL = crudUrlService.getURLByShortURL("shorter/t3/" + shortURL);
+        String inputShortURL = "shorter/t3/" + shortURL;
+        Optional<URL> existingURL = crudUrlService.getURLByShortURL(inputShortURL);
+
         if (existingURL.isPresent()) {
-            crudUrlService.deleteURL("shorter/t3/" + shortURL);
+            crudUrlService.deleteURL(inputShortURL);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

@@ -8,7 +8,6 @@ import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
 import java.io.IOException;
 
-
 @Controller
 public class RedirectController {
     private final URLServiceImpl urlService;
@@ -19,9 +18,11 @@ public class RedirectController {
 
     @GetMapping("/shorter/t3/{shortURL}")
     public void redirectToOriginalURL(@PathVariable String shortURL, HttpServletResponse response) throws IOException {
-        String originalURL = urlService.getOriginalURL("shorter/t3/" + shortURL);
+        String inputShortURL = "shorter/t3/" + shortURL;
+        String originalURL = urlService.getOriginalURL(inputShortURL);
+
         if (originalURL != null) {
-            urlService.incrementClickCount("shorter/t3/" + shortURL); //мені здається його саме сюди вставити
+            urlService.incrementClickCount(inputShortURL);
             response.sendRedirect(originalURL);
         }
     }
