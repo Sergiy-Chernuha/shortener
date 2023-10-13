@@ -76,14 +76,12 @@ public class UrlController {
 
     @GetMapping("/{shortURL}")
     public ResponseEntity<String> checkShortURLExpiry(@PathVariable String shortURL) {
-        String longURL = urlServiceImpl.checkShortURLExpiry(shortURL);
+        Optional<String> longURL = urlServiceImpl.checkShortURLExpiry(shortURL);
 
-        if (longURL != null) {
-            // Перенаправлення на довгу URL-адресу
-            return new ResponseEntity<>(HttpStatus.FOUND);
+        if (longURL.isPresent()) {
+            return ResponseEntity.status(HttpStatus.FOUND).body(longURL.get());
         } else {
-            // Обробка випадку, коли коротку URL-адресу не знайдено або її термін дії закінчився
-            return new ResponseEntity<>("Коротка URL-адреса не знайдена або термін дії минув", HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Коротка URL-адреса не знайдена або термін дії минув");
         }
     }
 
