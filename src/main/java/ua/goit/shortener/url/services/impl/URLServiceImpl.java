@@ -93,20 +93,20 @@ public class URLServiceImpl implements URLService {
     }
 
     @Override
-    public String checkShortURLExpiry(String shortURL) {
-        URL url = urlRepository.findByShortURL(shortURL); // Отримати об'єкт URL за коротким посиланням
+    public Optional<String> checkShortURLExpiry(String shortURL) {
+        URL url = urlRepository.findByShortURL(shortURL);
 
         if (url != null) {
             Date expiryDate = url.getExpiryDate();
             Date currentDate = new Date();
 
             if (expiryDate != null && currentDate.after(expiryDate)) {
-                return "Це посилання більше не активне.";
+                return Optional.of("Це посилання більше не активне.");
             } else {
-                return url.getLongURL();
+                return Optional.of(url.getLongURL());
             }
         } else {
-            return "Посилання не знайдено.";
+            return Optional.empty();
         }
     }
     
