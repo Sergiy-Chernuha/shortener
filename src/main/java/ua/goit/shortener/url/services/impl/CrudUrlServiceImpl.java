@@ -39,6 +39,8 @@ public class CrudUrlServiceImpl implements CrudUrlService {
             URL updatedURL = existingURL.get();
             updatedURL.setLongURL(url.getLongURL());
             updatedURL.setCreateDate(url.getCreateDate());
+            updatedURL.setClickCount(url.getClickCount());
+            updatedURL.setShortURL(url.getShortURL());
 
             return urlRepository.save(updatedURL);
         } else {
