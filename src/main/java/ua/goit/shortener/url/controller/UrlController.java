@@ -99,7 +99,7 @@ public class UrlController {
         dto.setShortURL(url.getShortURL());
         dto.setOriginalURL(url.getLongURL());
         dto.setCreateDate(url.getCreateDate());
-        dto.setClickCount(url.getClicks());
+        dto.setClickCount(url.getClickCount());
         return dto;
     }
 }
