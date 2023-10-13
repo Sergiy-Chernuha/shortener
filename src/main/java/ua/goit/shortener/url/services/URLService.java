@@ -24,5 +24,5 @@ public interface URLService {
     // встановлення терміну дії короткого url
     void setExpiryShortURL(URL url);
     // перевірка терміну дії короткого URL
-    String checkShortURLExpiry(String shortURL);
+    Optional<String> checkShortURLExpiry(String shortURL);
 }
