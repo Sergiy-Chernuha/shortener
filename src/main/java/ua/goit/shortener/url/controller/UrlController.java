@@ -32,9 +32,10 @@ public class UrlController {
 
     @GetMapping("/active")
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
-        List<URL> activeUrls = crudUrlService.getAllURLs()
+        List<URL> activeUrls = (List<URL>) crudUrlService.getAllURLs()
                 .stream()
-                .filter(url -> url.getClicks() > 0).toList();
+                //   .filter(url -> url.getClicks() > 0)
+                .toList();
 
         List<UrlDTO> urlDTOs = activeUrls.stream().map(this::mapToDTO).collect(Collectors.toList());
         return ResponseEntity.ok(urlDTOs);
@@ -48,9 +49,9 @@ public class UrlController {
         return ResponseEntity.ok(urlDTOs);
     }
 
-    @GetMapping("/info/{shortURL}")
+    @GetMapping("/info/shorter/t3/{shortURL}")
     public ResponseEntity<UrlDTO> getURLInfo(@PathVariable String shortURL) {
-        UrlDTO urlInfo = urlServiceImpl.getURLInfo(shortURL);
+        UrlDTO urlInfo = urlServiceImpl.getURLInfo("shorter/t3/" + shortURL);
         if (urlInfo != null) {
             return ResponseEntity.ok(urlInfo);
         } else {
@@ -68,21 +69,21 @@ public class UrlController {
         }
     }
 
-    @DeleteMapping("/delete/{shortURL}")
+    @DeleteMapping("/delete/shorter/t3/{shortURL}")
     public ResponseEntity<Void> deleteURL(@PathVariable String shortURL) {
-        Optional<URL> existingURL = crudUrlService.getURLByShortURL(shortURL);
+        Optional<URL> existingURL = crudUrlService.getURLByShortURL("shorter/t3/" + shortURL);
         if (existingURL.isPresent()) {
-            crudUrlService.deleteURL(shortURL);
+            crudUrlService.deleteURL("shorter/t3/" + shortURL);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PutMapping("/update/{shortURL}")
+    @PutMapping("/update/shorter/t3/{shortURL}")
     public ResponseEntity<String> updateURL(@PathVariable String shortURL, @RequestBody String newOriginalURL) {
         if (urlServiceImpl.isValidURL(newOriginalURL)) {
-            boolean updated = urlServiceImpl.updateShortURL(shortURL);
+            boolean updated = urlServiceImpl.updateShortURL("shorter/t3/" + shortURL);
             if (updated) {
                 return ResponseEntity.ok("URL updated successfully");
             } else {

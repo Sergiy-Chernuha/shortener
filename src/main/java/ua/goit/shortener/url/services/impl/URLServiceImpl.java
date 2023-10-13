@@ -1,8 +1,6 @@
 package ua.goit.shortener.url.services.impl;
 
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
@@ -13,8 +11,13 @@ import ua.goit.shortener.user.entity.User;
 import ua.goit.shortener.user.repositories.UsersRepository;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -33,17 +36,21 @@ public class URLServiceImpl implements URLService {
 
     @Override
     public boolean isValidURL(String originalURL) {
-        Request request = new Request.Builder()
-                .url(originalURL)
-                .build();
-        try (Response response = httpClient.newCall(request).execute()) {
-            // якщо код 200 то все ок
-            return response.isSuccessful();
-        } catch (IOException e) {
-            // помилка при виконанні , URL недоступний
-            return false;
-        }
+        new URL(originalURL);
+        return true;
     }
+
+//        Request request = new Request.Builder()
+//                .url(originalURL)
+//                .build();
+//        try (Response response = httpClient.newCall(request).execute()) {
+//            // якщо код 200 то все ок
+//            return response.isSuccessful();
+//        } catch (IOException e) {
+//            // помилка при виконанні , URL недоступний
+//            return false;
+//        }
+
 
     @Override
     public String saveShortURL(Long userId, String originalURL) {
@@ -63,7 +70,7 @@ public class URLServiceImpl implements URLService {
     @Override
     public String createShortURL(String originalURL) {
         // генерація посилання
-        String prefix = "https://shorter/t3/";
+        String prefix = "shorter/t3/";
         int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
         String randomString = generateRandomString(randomLength);
 
@@ -71,13 +78,11 @@ public class URLServiceImpl implements URLService {
     }
 
     @Override
-    public boolean isValidShortURL(String saveShortURL) {
+    public boolean isValidShortURL(String shortURL) {
         try {
-            new java.net.URL(saveShortURL).toURI();
-
+            new java.net.URL(shortURL).toURI();
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
-
             return false;
         }
     }
@@ -90,7 +95,6 @@ public class URLServiceImpl implements URLService {
     @Override
     public String getOriginalURL(String shortURL) {
         List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
-
         if (!urls.isEmpty()) {
             URL findOriginalUrl = urls.get(0); // перший об'єкт зі списку
             return findOriginalUrl.getLongURL();
@@ -98,7 +102,6 @@ public class URLServiceImpl implements URLService {
             return null;
         }
     }
-
 
     //генератор строки
     public String generateRandomString(int length) {
@@ -113,6 +116,7 @@ public class URLServiceImpl implements URLService {
 
         return randomString.toString();
     }
+
     @Override
     public UrlDTO getURLInfo(String shortURL) {
         URL url = urlRepository.findByShortURL(shortURL);
