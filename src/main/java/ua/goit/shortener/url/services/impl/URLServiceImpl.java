@@ -146,6 +146,7 @@ public class URLServiceImpl implements URLService {
 
         if (!urls.isEmpty()) {
             URL foundOriginalUrl = urls.get(0);
+
             foundOriginalUrl.setCreateDate(new Date());
             urlRepository.save(foundOriginalUrl);
 
