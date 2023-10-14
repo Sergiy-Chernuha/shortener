@@ -86,10 +86,8 @@ public class URLServiceImpl implements URLService {
         try {
             new java.net.URL(saveShortURL).toURI();
 
-//            new java.net.URL(shortURL).toURI();
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
-
             return false;
         }
     }
