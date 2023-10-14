@@ -9,5 +9,6 @@ public class UrlDTO {
     private String shortURL;
     private String originalURL;
     private Date createDate;
+    private Date expiryDate;
     private int clickCount;
 }

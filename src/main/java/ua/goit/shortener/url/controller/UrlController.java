@@ -2,6 +2,7 @@ package ua.goit.shortener.url.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.goit.shortener.url.dto.UrlDTO;
@@ -74,11 +75,24 @@ public class UrlController {
         }
     }
 
+    //треба перенести в сервіс і прибрати з контроллера.
+    @GetMapping("/{shortURL}")
+    public ResponseEntity<String> checkShortURLExpiry(@PathVariable String shortURL) {
+        Optional<String> longURL = urlServiceImpl.getShortURLWithCheckExpiry(shortURL);
+
+        if (longURL.isPresent()) {
+            return ResponseEntity.status(HttpStatus.FOUND).body(longURL.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Коротка URL-адреса не знайдена або термін дії минув");
+        }
+    }
+
     private UrlDTO mapToDTO(URL url) {
         UrlDTO dto = new UrlDTO();
         dto.setShortURL(url.getShortURL());
         dto.setOriginalURL(url.getLongURL());
         dto.setCreateDate(url.getCreateDate());
+        dto.setExpiryDate(url.getExpiryDate());
         dto.setClickCount(url.getClickCount());
         return dto;
     }

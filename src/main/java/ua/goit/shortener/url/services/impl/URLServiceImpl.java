@@ -60,6 +60,7 @@ public class URLServiceImpl implements URLService {
         url.setClickCount(0); // кількість переходів
         User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
         url.setUser(user); // Призначити користувача URL
+        url.setExpiryShortURL(); // Встановити термін придатності URL
         urlRepository.save(url);
 
         return shortURL;
@@ -84,6 +85,28 @@ public class URLServiceImpl implements URLService {
         } catch (URISyntaxException | MalformedURLException exception) {
 
             return false;
+        }
+    }
+
+
+    @Override
+    public Optional<String> getShortURLWithCheckExpiry(String shortURL) {
+        URL url = urlRepository.findByShortURL(shortURL);
+        if (url == null) {
+            return Optional.empty();
+        }
+
+        Date expiryDate = url.getExpiryDate();
+        Date currentDate = new Date();
+
+        if (expiryDate == null) {
+            return Optional.empty();
+        }
+
+        if (currentDate.after(expiryDate)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(url.getLongURL());
         }
     }
 

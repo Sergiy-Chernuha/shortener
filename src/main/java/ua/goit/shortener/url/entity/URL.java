@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import ua.goit.shortener.user.entity.User;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -20,6 +22,9 @@ public class URL {
     @Column(name = "CREATE_DATE")
     private Date createDate;
 
+    @Column(name = "EXPIRY_DATE")
+    private Date expiryDate;
+
     @Column(name = "CLICKS_COUNT")
     private Integer clickCount;
 
@@ -28,5 +33,11 @@ public class URL {
     private User user;
 
     public URL() {
+    }
+
+    public void setExpiryShortURL() {
+        // Встановлюємо термін придатності на 2 доби від поточної дати створення
+        LocalDateTime newExpiryDate = LocalDateTime.ofInstant(createDate.toInstant(), ZoneId.systemDefault()).plusDays(2);
+        this.expiryDate= Date.from(newExpiryDate.atZone(ZoneId.systemDefault()).toInstant());
     }
 }
