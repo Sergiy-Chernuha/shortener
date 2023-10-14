@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Random;
 
-
 @Service
 public class URLServiceImpl implements URLService {
 
@@ -20,7 +19,8 @@ public class URLServiceImpl implements URLService {
 
     @Autowired
     public URLServiceImpl(URLRepository urlRepository) {
-        this.urlRepository = urlRepository; }
+        this.urlRepository = urlRepository;
+    }
 
     @Override
     public String createShortURL(String originalURL) {
@@ -31,6 +31,7 @@ public class URLServiceImpl implements URLService {
             int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
             String randomString = generateRandomString(randomLength);
             String shortURL = prefix + randomString;
+
             if (isShortUrlUnique(shortURL))
                 return shortURL;
         }
