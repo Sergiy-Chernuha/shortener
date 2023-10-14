@@ -3,6 +3,8 @@ package ua.goit.shortener.url.services;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
 
+import java.util.Optional;
+
 @Service
 public interface URLService {
     boolean isValidURL(String originalURL);
@@ -10,10 +12,9 @@ public interface URLService {
     String createShortURL(String originalURL);
     //створення короткого url
     boolean isValidShortURL(String shortURL);
-
+    //перевірка на валідність короткого url
     UrlDTO getURLInfo(String shortURL);
 
-    //перевірка на валідність короткого url
     void incrementClickCount(String shortURL);
     //лічильник переходів
     String getOriginalURL(String shortUrl);
@@ -21,8 +22,6 @@ public interface URLService {
     String saveShortURL(Long userId, String originalURL);
     //збереження у бд
 
-    // встановлення терміну дії короткого url
-    void setExpiryShortURL(URL url);
     // перевірка терміну дії короткого URL
-    Optional<String> checkShortURLExpiry(String shortURL);
+    Optional<String> getShortURLWithCheckExpiry(String shortURL);
 }

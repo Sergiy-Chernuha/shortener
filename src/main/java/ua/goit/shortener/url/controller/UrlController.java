@@ -1,14 +1,12 @@
 package ua.goit.shortener.url.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
-import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
 import java.util.List;
@@ -74,10 +72,10 @@ public class UrlController {
             return ResponseEntity.notFound().build();
         }
     }
-
+//треба перенести в сервіс і прибрати з контроллера.
     @GetMapping("/{shortURL}")
     public ResponseEntity<String> checkShortURLExpiry(@PathVariable String shortURL) {
-        Optional<String> longURL = urlServiceImpl.checkShortURLExpiry(shortURL);
+        Optional<String> longURL = urlServiceImpl.getShortURLWithCheckExpiry(shortURL);
 
         if (longURL.isPresent()) {
             return ResponseEntity.status(HttpStatus.FOUND).body(longURL.get());

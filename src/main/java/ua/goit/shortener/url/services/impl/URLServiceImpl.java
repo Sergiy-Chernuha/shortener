@@ -15,8 +15,6 @@ import ua.goit.shortener.user.repositories.UsersRepository;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -60,7 +58,7 @@ public class URLServiceImpl implements URLService {
         url.setClicks(0); // кількість переходів
         User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
         url.setUser(user); // Призначити користувача URL   
-        setExpiryShortURL(url); // Встановити термін придатності URL
+        url.setExpiryShortURL(); // Встановити термін придатності URL
         urlRepository.save(url);
 
         return shortURL;
@@ -89,34 +87,31 @@ public class URLServiceImpl implements URLService {
     }
 
     @Override
-    public void setExpiryShortURL(URL url) {
-        // Встановлюємо термін придатності на 2 доби від поточної дати створення
-        LocalDateTime expiryDate = LocalDateTime.ofInstant(url.getCreateDate().toInstant(), ZoneId.systemDefault()).plusDays(2);
-        url.setExpiryDate(Date.from(expiryDate.atZone(ZoneId.systemDefault()).toInstant()));
-    }
-
-    @Override
-    public Optional<String> checkShortURLExpiry(String shortURL) {
+    public Optional<String> getShortURLWithCheckExpiry(String shortURL) {
         URL url = urlRepository.findByShortURL(shortURL);
-
-        if (url != null) {
-            Date expiryDate = url.getExpiryDate();
-            Date currentDate = new Date();
-
-            if (expiryDate != null && currentDate.after(expiryDate)) {
-                return Optional.of("Це посилання більше не активне.");
-            } else {
-                return Optional.of(url.getLongURL());
-            }
-        } else {
+        if (url == null) {
             return Optional.empty();
         }
+
+        Date expiryDate = url.getExpiryDate();
+        Date currentDate = new Date();
+
+        if (expiryDate == null) {
+            return Optional.empty();
+        }
+
+        if (currentDate.after(expiryDate)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(url.getLongURL());
+        }
     }
-    
+
     @Override
     public UrlDTO getURLInfo(String shortURL) {
         return null;
     }
+
     @Override
     public void incrementClickCount(String shortURL) {
 
