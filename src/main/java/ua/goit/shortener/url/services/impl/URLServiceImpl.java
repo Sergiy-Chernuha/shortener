@@ -25,11 +25,13 @@ public class URLServiceImpl implements URLService {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final URLRepository urlRepository;
     private final UsersRepository usersRepository;
+    private final CrudUrlServiceImpl crudUrlService;
 
     @Autowired
-    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository) {
+    public URLServiceImpl(URLRepository urlRepository, UsersRepository usersRepository, CrudUrlServiceImpl crudUrlService) {
         this.urlRepository = urlRepository;
         this.usersRepository = usersRepository;
+        this.crudUrlService = crudUrlService;
     }
 
     @Override
@@ -55,9 +57,9 @@ public class URLServiceImpl implements URLService {
         url.setShortURL(shortURL);
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
-        url.setClicks(0); // кількість переходів
+        url.setClickCount(0); // кількість переходів
         User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
-        url.setUser(user); // Призначити користувача URL   
+        url.setUser(user); // Призначити користувача URL
         url.setExpiryShortURL(); // Встановити термін придатності URL
         urlRepository.save(url);
 
@@ -85,6 +87,7 @@ public class URLServiceImpl implements URLService {
             return false;
         }
     }
+
 
     @Override
     public Optional<String> getShortURLWithCheckExpiry(String shortURL) {
@@ -114,7 +117,15 @@ public class URLServiceImpl implements URLService {
 
     @Override
     public void incrementClickCount(String shortURL) {
+        Optional<URL> urlByShortURL = crudUrlService.getURLByShortURL(shortURL);
 
+        if (urlByShortURL.isPresent()) {
+            URL url = urlByShortURL.get();
+            Integer clickCount = url.getClickCount();
+            clickCount++;
+            url.setClickCount(clickCount);
+            crudUrlService.updateURL(url);
+        }
     }
 
     @Override
@@ -128,7 +139,6 @@ public class URLServiceImpl implements URLService {
             return null;
         }
     }
-
 
     //генератор строки
     public String generateRandomString(int length) {

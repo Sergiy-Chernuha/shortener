@@ -1,12 +1,13 @@
 package ua.goit.shortener.url.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
+import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class UrlController {
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
         List<URL> activeUrls = crudUrlService.getAllURLs()
                 .stream()
-                .filter(url -> url.getClicks() > 0).toList();
+                .filter(url -> url.getClickCount() > 0).toList();
 
         List<UrlDTO> urlDTOs = activeUrls.stream().map(this::mapToDTO).collect(Collectors.toList());
         return ResponseEntity.ok(urlDTOs);
@@ -72,7 +73,8 @@ public class UrlController {
             return ResponseEntity.notFound().build();
         }
     }
-//треба перенести в сервіс і прибрати з контроллера.
+
+    //треба перенести в сервіс і прибрати з контроллера.
     @GetMapping("/{shortURL}")
     public ResponseEntity<String> checkShortURLExpiry(@PathVariable String shortURL) {
         Optional<String> longURL = urlServiceImpl.getShortURLWithCheckExpiry(shortURL);
@@ -90,7 +92,7 @@ public class UrlController {
         dto.setOriginalURL(url.getLongURL());
         dto.setCreateDate(url.getCreateDate());
         dto.setExpiryDate(url.getExpiryDate());
-        dto.setClickCount(url.getClicks());
+        dto.setClickCount(url.getClickCount());
         return dto;
     }
 }

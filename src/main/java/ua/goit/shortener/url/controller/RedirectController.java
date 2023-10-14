@@ -20,6 +20,7 @@ public class RedirectController {
             String originalURL = urlService.getOriginalURL(shortUrl);
 
             if (originalURL != null) {
+                urlService.incrementClickCount(shortUrl); //мені здається його саме сюди вставити
                 return "redirect:" + originalURL;
             }
         }
