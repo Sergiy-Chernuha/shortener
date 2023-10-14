@@ -70,10 +70,15 @@ public class URLServiceImpl implements URLService {
     public String createShortURL(String originalURL) {
         // генерація посилання
         String prefix = "https://shorter/t3/";
-        int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
-        String randomString = generateRandomString(randomLength);
 
-        return prefix + randomString;
+        while (true) {
+            int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
+            String randomString = generateRandomString(randomLength);
+            String shortURL = prefix + randomString;
+
+            if (isShortUrlUnique(shortURL))
+                return shortURL;
+        }
     }
 
     @Override
@@ -83,7 +88,6 @@ public class URLServiceImpl implements URLService {
 
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
-
             return false;
         }
     }
@@ -152,5 +156,11 @@ public class URLServiceImpl implements URLService {
         }
 
         return randomString.toString();
+    }
+
+    //перевірка, чи існує short URL в БД
+    public boolean isShortUrlUnique(String url) {
+        List<URL> existingURLs = urlRepository.findByShortURLContaining(url);
+        return existingURLs.isEmpty();
     }
 }
