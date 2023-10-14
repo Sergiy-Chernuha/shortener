@@ -1,13 +1,12 @@
 package ua.goit.shortener.url.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
-import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
 import java.util.List;
@@ -36,11 +35,24 @@ public class UrlController {
         return ResponseEntity.ok(urlDTOs);
     }
 
+//    @GetMapping("/all")
+//    public ResponseEntity<List<UrlDTO>> getAllURLs() {
+//        List<URL> urls = crudUrlService.getAllURLs();
+//        List<UrlDTO> urlDTOs = urls.stream().map(this::mapToDTO).collect(Collectors.toList());
+//
+//        ModelAndView modelAndView = new ModelAndView("shortener/main-page");
+//        modelAndView.addObject(urls.toString(), crudUrlService.getAllURLs());
+//        //return ResponseEntity.ok(urlDTOs);
+//        return modelAndView;
+//    }
     @GetMapping("/all")
-    public ResponseEntity<List<UrlDTO>> getAllURLs() {
+    public ModelAndView getAllURLs() {
         List<URL> urls = crudUrlService.getAllURLs();
         List<UrlDTO> urlDTOs = urls.stream().map(this::mapToDTO).collect(Collectors.toList());
-        return ResponseEntity.ok(urlDTOs);
+
+        ModelAndView modelAndView = new ModelAndView("shortener/main-page");
+        modelAndView.addObject(urls.toString(), crudUrlService.getAllURLs());
+        return modelAndView;
     }
 
     @GetMapping("/info/{shortURL}")

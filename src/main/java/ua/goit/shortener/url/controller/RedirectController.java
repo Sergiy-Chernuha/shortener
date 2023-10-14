@@ -24,6 +24,6 @@ public class RedirectController {
             }
         }
 
-        return "redirect:/"; // Редірект на головну сторінку або обробка помилки
+        return "redirect:/main-page"; // Редірект на головну сторінку або обробка помилки
         }
     }
