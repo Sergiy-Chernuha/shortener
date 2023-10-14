@@ -1,0 +1,257 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "URL shortener app API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9999"
+    }
+  ],
+  "paths": {
+    "/api/urls/active": {
+      "get": {
+        "tags": [
+          "URL"
+        ],
+        "summary": "Get all active URLs",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No active URLs found"
+          }
+        }
+      }
+    },
+    "/api/urls/all": {
+      "get": {
+        "tags": [
+          "URL"
+        ],
+        "summary": "Get all URLs",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No URLs found"
+          }
+        }
+      }
+    },
+    "/api/urls/info/{shortURL}": {
+      "get": {
+        "tags": [
+          "URL"
+        ],
+        "summary": "Get information about a specific URL",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortURL",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Short URL"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "URL not found"
+          }
+        }
+      }
+    },
+    "/api/urls/create": {
+      "post": {
+        "tags": [
+          "URL"
+        ],
+        "summary": "Create a short URL",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "originalURL": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originalURL"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Short URL created successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/api/urls/delete/{shortURL}": {
+      "delete": {
+        "tags": [
+          "URL"
+        ],
+        "summary": "Delete a URL",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortURL",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Short URL"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "URL deleted successfully"
+          },
+          "404": {
+            "description": "URL not found"
+          }
+        }
+      }
+    },
+    "/api/urls/update/{shortURL}": {
+      "put": {
+        "tags": [
+          "URL"
+        ],
+        "summary": "Update a URL",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortURL",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Short URL"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newOriginalURL": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "newOriginalURL"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "URL updated successfully"
+          },
+          "400": {
+            "description": "Invalid URL"
+          },
+          "404": {
+            "description": "URL not found"
+          }
+        }
+      }
+    },
+    "/shorter/t3/{shortURL}": {
+      "get": {
+        "tags": [
+          "URL"
+        ],
+        "summary": "Redirect from short URL to original",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortURL",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Short URL"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "URL not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UrlDTO": {
+        "type": "object",
+        "properties": {
+          "shortURL": {
+            "type": "string"
+          },
+          "originalURL": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string"
+          },
+          "clickCount": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
