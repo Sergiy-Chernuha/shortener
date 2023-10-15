@@ -10,5 +10,5 @@ public class UrlDTO {
     private String originalURL;
     private Date createDate;
     private Date expiryDate;
-    private int clickCount;
+    private Integer clickCount;
 }

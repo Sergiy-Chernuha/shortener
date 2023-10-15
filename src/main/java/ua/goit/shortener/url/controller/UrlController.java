@@ -42,10 +42,9 @@ public class UrlController {
 
         if (requestURI.contains("/api/v2")) {
             // Логіка для версії 2: сортування URL за назвою в зворотньому алфавітному порядку
-            urls.sort((url1, url2) -> url2.getShortURL().compareTo(url1.getShortURL()));
+            urlDTOs.sort((url1, url2) -> url2.getShortURL().compareTo(url1.getShortURL()));
         }
 
-        List<UrlDTO> urlDTOs = urls.stream().map(this::mapToDTO).collect(Collectors.toList());
         return ResponseEntity.ok(urlDTOs);
     }
 
