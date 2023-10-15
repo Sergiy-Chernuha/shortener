@@ -17,6 +17,7 @@ public class RedirectController {
     public RedirectController(URLServiceImpl urlService) {
         this.urlService = urlService;
     }
+
     @GetMapping("/shorter/t3/{shortURL}")
     @Operation(
             summary = "Redirect to Original URL",
@@ -26,13 +27,11 @@ public class RedirectController {
                     @ApiResponse(responseCode = "404", description = "Short URL not found")
             }
     )
-
-    public String redirectToOriginalURL(@PathVariable String shortUrl, HttpServletResponse response) throws IOException {
+    public void redirectToOriginalURL(@PathVariable String shortURL, HttpServletResponse response) throws IOException {
         String inputShortURL = "shorter/t3/" + shortURL;
         String originalURL = urlService.getOriginalURL(inputShortURL);
 
         if (originalURL != null) {
-            urlService.incrementClickCount(inputShortURL);
             response.sendRedirect(originalURL);
         }
     }

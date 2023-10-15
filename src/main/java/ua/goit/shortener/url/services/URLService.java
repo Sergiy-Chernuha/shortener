@@ -2,30 +2,34 @@ package ua.goit.shortener.url.services;
 
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
-
-import java.util.Optional;
-
-import java.io.IOException;
+import ua.goit.shortener.url.entity.URL;
 
 @Service
 public interface URLService {
-    boolean isValidURL(String originalURL) throws IOException, InterruptedException;
     //перевірка на валідність оригінального url
     String createShortURL(String originalURL);
+
     //створення короткого url
-    boolean isValidShortURL(String shortURL);
+    boolean isValidURL(String shortURL);
+
     //перевірка на валідність короткого url
     UrlDTO getURLInfo(String shortURL);
 
     void incrementClickCount(String shortURL);
+
     //лічильник переходів
     String getOriginalURL(String shortUrl);
+
     //отримання оригінального юрл
     String saveShortURL(Long userId, String originalURL);
 
-    boolean updateShortURL(String shortURL);
     //збереження у бд
+    boolean updateShortURL(String shortURL, String newOriginUrl);
+    //оновлення короткогоURL і всих його параметрів
 
     // перевірка терміну дії короткого URL
-    Optional<String> getShortURLWithCheckExpiry(String shortURL);
+    Boolean isActiveShortURL(URL checkedShortUrl);
+
+    // парсинг ентіті в ДТО
+    UrlDTO mapToDTO(URL url);
 }

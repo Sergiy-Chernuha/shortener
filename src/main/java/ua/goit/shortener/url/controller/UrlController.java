@@ -1,19 +1,14 @@
 package ua.goit.shortener.url.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ua.goit.shortener.url.dto.InputURLDTO;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
-import ua.goit.shortener.url.services.URLService;
-import ua.goit.shortener.url.services.impl.CrudUrlServiceImpl;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,7 +28,7 @@ public class UrlController {
     @GetMapping("/active")
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
         List<URL> activeUrls = crudUrlService.getAllURLs();
-        List<UrlDTO> urlDTOs = activeUrls.stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(urlDTOs);
     }
@@ -41,13 +36,14 @@ public class UrlController {
     @GetMapping("/all")
     public ResponseEntity<List<UrlDTO>> getAllURLs() {
         List<URL> urls = crudUrlService.getAllURLs();
-        List<UrlDTO> urlDTOs = urls.stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<UrlDTO> urlDTOs = urls.stream().map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
         return ResponseEntity.ok(urlDTOs);
     }
 
     @GetMapping("/info/shorter/t3/{shortURL}")
     public ResponseEntity<UrlDTO> getURLInfo(@PathVariable String shortURL) {
         UrlDTO urlInfo = urlServiceImpl.getURLInfo("shorter/t3/" + shortURL);
+
         if (urlInfo != null) {
             return ResponseEntity.ok(urlInfo);
         } else {
@@ -56,9 +52,11 @@ public class UrlController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createShortURL(@RequestBody String originalURL) {
-        if (urlServiceImpl.isValidURL(originalURL)) {
-            String shortURL = urlServiceImpl.createShortURL(originalURL);
+    public ResponseEntity<String> createShortURL(@RequestBody InputURLDTO inputURL) {
+        if (urlServiceImpl.isValidURL(inputURL.getOriginalURL())) {
+            Long userId = 1L;
+            String shortURL = urlServiceImpl.saveShortURL(userId, inputURL.getOriginalURL());
+
             return ResponseEntity.ok(shortURL);
         } else {
             return ResponseEntity.badRequest().body("Недійсний URL");
@@ -79,9 +77,12 @@ public class UrlController {
     }
 
     @PutMapping("/update/shorter/t3/{shortURL}")
-    public ResponseEntity<String> updateURL(@PathVariable String shortURL, @RequestBody String newOriginalURL) {
+    public ResponseEntity<String> updateURL(@PathVariable String shortURL, @RequestBody InputURLDTO inputURLDTO) {
+        String newOriginalURL = inputURLDTO.getOriginalURL();
+
         if (urlServiceImpl.isValidURL(newOriginalURL)) {
-            boolean updated = urlServiceImpl.updateShortURL("shorter/t3/" + shortURL);
+            boolean updated = urlServiceImpl.updateShortURL("shorter/t3/" + shortURL, newOriginalURL);
+
             if (updated) {
                 return ResponseEntity.ok("URL updated successfully");
             } else {
@@ -90,27 +91,5 @@ public class UrlController {
         } else {
             return ResponseEntity.badRequest().body("Error");
         }
-    }
-
-    //треба перенести в сервіс і прибрати з контроллера.
-    @GetMapping("/{shortURL}")
-    public ResponseEntity<String> checkShortURLExpiry(@PathVariable String shortURL) {
-        Optional<String> longURL = urlServiceImpl.getShortURLWithCheckExpiry(shortURL);
-
-        if (longURL.isPresent()) {
-            return ResponseEntity.status(HttpStatus.FOUND).body(longURL.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Коротка URL-адреса не знайдена або термін дії минув");
-        }
-    }
-
-    private UrlDTO mapToDTO(URL url) {
-        UrlDTO dto = new UrlDTO();
-        dto.setShortURL(url.getShortURL());
-        dto.setOriginalURL(url.getLongURL());
-        dto.setCreateDate(url.getCreateDate());
-        dto.setExpiryDate(url.getExpiryDate());
-        dto.setClickCount(url.getClickCount());
-        return dto;
     }
 }
