@@ -1,5 +1,8 @@
 package ua.goit.shortener.url.services.impl;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
@@ -9,6 +12,7 @@ import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.user.entity.User;
 import ua.goit.shortener.user.repositories.UsersRepository;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
@@ -18,6 +22,7 @@ import java.util.Random;
 
 @Service
 public class URLServiceImpl implements URLService {
+    private final OkHttpClient httpClient = new OkHttpClient();
     private final URLRepository urlRepository;
     private final UsersRepository usersRepository;
     private final CrudUrlServiceImpl crudUrlService;
@@ -56,8 +61,9 @@ public class URLServiceImpl implements URLService {
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
         url.setClickCount(0); // кількість переходів
-        User user = usersRepository.getOne(userId); // Отримати користувача за ідентифікатором
+        User user = usersRepository.getOne(String.valueOf(userId)); // Отримати користувача за ідентифікатором
         url.setUser(user); // Призначити користувача URL
+        url.setExpiryShortURL(); // Встановити термін придатності URL
         urlRepository.save(url);
 
         return shortURL;
@@ -67,10 +73,15 @@ public class URLServiceImpl implements URLService {
     public String createShortURL(String originalURL) {
         // генерація посилання
         String prefix = "shorter/t3/";
-        int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
-        String randomString = generateRandomString(randomLength);
 
-        return prefix + randomString;
+        while (true) {
+            int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
+            String randomString = generateRandomString(randomLength);
+            String shortURL = prefix + randomString;
+
+            if (isShortUrlUnique(shortURL))
+                return shortURL;
+        }
     }
 
     @Override
@@ -81,6 +92,33 @@ public class URLServiceImpl implements URLService {
         } catch (URISyntaxException | MalformedURLException exception) {
             return false;
         }
+    }
+
+
+    @Override
+    public Optional<String> getShortURLWithCheckExpiry(String shortURL) {
+        URL url = urlRepository.findByShortURL(shortURL);
+        if (url == null) {
+            return Optional.empty();
+        }
+
+        Date expiryDate = url.getExpiryDate();
+        Date currentDate = new Date();
+
+        if (expiryDate == null) {
+            return Optional.empty();
+        }
+
+        if (currentDate.after(expiryDate)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(url.getLongURL());
+        }
+    }
+
+    @Override
+    public UrlDTO getURLInfo(String shortURL) {
+        return null;
     }
 
     @Override
@@ -120,6 +158,12 @@ public class URLServiceImpl implements URLService {
         }
 
         return randomString.toString();
+    }
+
+    //перевірка, чи існує short URL в БД
+    public boolean isShortUrlUnique(String url) {
+        List<URL> existingURLs = urlRepository.findByShortURLContaining(url);
+        return existingURLs.isEmpty();
     }
 
     @Override
