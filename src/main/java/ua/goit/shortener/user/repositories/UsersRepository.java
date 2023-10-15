@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ua.goit.shortener.user.entity.User;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User, String> {
+public interface UsersRepository extends JpaRepository<User, Long> {
 }

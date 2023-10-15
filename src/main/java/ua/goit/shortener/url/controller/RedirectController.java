@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
+import java.io.IOException;
+
 @Controller
 public class RedirectController {
     private final URLServiceImpl urlService;
@@ -15,7 +17,8 @@ public class RedirectController {
     public RedirectController(URLServiceImpl urlService) {
         this.urlService = urlService;
     }
-    @GetMapping("/{shortUrl}")
+
+    @GetMapping("/shorter/t3/{shortURL}")
     @Operation(
             summary = "Redirect to Original URL",
             description = "Redirects to the original URL associated with the provided short URL.",
@@ -24,17 +27,12 @@ public class RedirectController {
                     @ApiResponse(responseCode = "404", description = "Short URL not found")
             }
     )
+    public void redirectToOriginalURL(@PathVariable String shortURL, HttpServletResponse response) throws IOException {
+        String inputShortURL = "shorter/t3/" + shortURL;
+        String originalURL = urlService.getOriginalURL(inputShortURL);
 
-    public String redirectToOriginalURL(@PathVariable String shortUrl, HttpServletResponse response) {
-        if (urlService.isValidShortURL(shortUrl)) {
-            String originalURL = urlService.getOriginalURL(shortUrl);
-
-            if (originalURL != null) {
-                urlService.incrementClickCount(shortUrl); //мені здається його саме сюди вставити
-                return "redirect:" + originalURL;
-            }
-        }
-
-        return "redirect:/"; // Редірект на головну сторінку або обробка помилки
+        if (originalURL != null) {
+            response.sendRedirect(originalURL);
         }
     }
+}
