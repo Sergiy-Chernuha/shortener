@@ -1,5 +1,6 @@
 package ua.goit.shortener.url.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/urls")
+@RequestMapping({"/api/v1/urls","/api/v2/urls"})
 public class UrlController {
     private final CrudUrlService crudUrlService;
     private final URLServiceImpl urlServiceImpl;
@@ -34,9 +35,16 @@ public class UrlController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UrlDTO>> getAllURLs() {
+    public ResponseEntity<List<UrlDTO>> getAllURLs(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
         List<URL> urls = crudUrlService.getAllURLs();
         List<UrlDTO> urlDTOs = urls.stream().map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
+
+        if (requestURI.contains("/api/v2")) {
+            // Логіка для версії 2: сортування URL за назвою в зворотньому алфавітному порядку
+            urlDTOs.sort((url1, url2) -> url2.getShortURL().compareTo(url1.getShortURL()));
+        }
+
         return ResponseEntity.ok(urlDTOs);
     }
 
