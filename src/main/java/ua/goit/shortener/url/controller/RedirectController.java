@@ -3,19 +3,21 @@ package ua.goit.shortener.url.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ua.goit.shortener.url.services.impl.URLServiceImpl;
+import ua.goit.shortener.url.services.CacheUrlService;
 
 import java.io.IOException;
 
 @Controller
 public class RedirectController {
-    private final URLServiceImpl urlService;
+    private final CacheUrlService cacheUrlService;
 
-    public RedirectController(URLServiceImpl urlService) {
-        this.urlService = urlService;
+    @Autowired
+    public RedirectController(CacheUrlService cacheUrlService) {
+        this.cacheUrlService = cacheUrlService;
     }
 
     @GetMapping("/shorter/t3/{shortURL}")
@@ -29,12 +31,12 @@ public class RedirectController {
     )
     public void redirectToOriginalURL(@PathVariable String shortURL, HttpServletResponse response) throws IOException {
         String inputShortURL = "shorter/t3/" + shortURL;
-        String originalURL = urlService.getOriginalURL(inputShortURL);
+        String originalURL = cacheUrlService.getOriginalURL(inputShortURL);
 
         if (originalURL != null) {
             response.sendRedirect(originalURL);
-        }else{
-            response.sendError(404,"Коротка URL-адреса не знайдена або термін дії минув");
+        } else {
+            response.sendError(404, "Short URL not found");
         }
     }
 }
