@@ -9,9 +9,7 @@ import ua.goit.shortener.user.services.UserServices;
 import java.util.Date;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class URLServiceImplTest {
@@ -25,7 +23,7 @@ class URLServiceImplTest {
 
         User user = new User();
         user.setId(1L);
-        String originalURL = "https://example.com";
+        String originalURL = "https://www.i.ua/";
 
         when(userServices.findUser(1L)).thenReturn(Optional.of(user));
 
@@ -75,7 +73,7 @@ class URLServiceImplTest {
 
         URL url = new URL();
         url.setShortURL("shortURL");
-        url.setLongURL("https://example.com");
+        url.setLongURL("https://www.i.ua/");
 
         when(crudUrlService.getURLByShortURL("shortURL")).thenReturn(Optional.of(url));
 
@@ -92,7 +90,7 @@ class URLServiceImplTest {
 
         URL url = new URL();
         url.setShortURL("shortURL");
-        url.setLongURL("https://example.com");
+        url.setLongURL("https://www.i.ua/");
 
         when(crudUrlService.getURLByShortURL("shortURL")).thenReturn(Optional.of(url));
 
@@ -133,7 +131,7 @@ class URLServiceImplTest {
         String shortURL = "shorter/t3/abc123";
         URL url = new URL();
         url.setShortURL(shortURL);
-        url.setLongURL("https://www.example.com");
+        url.setLongURL("https://www.i.ua/");
         url.setCreateDate(new Date());
         url.setExpiryDate(new Date(System.currentTimeMillis() + 3600000));
         url.setClickCount(0);
@@ -160,10 +158,10 @@ class URLServiceImplTest {
     public void testUpdateShortURL() {
         // Приклад даних для тесту
         String shortURL = "shorter/t3/abc123";
-        String newOriginalURL = "https://www.newexample.com";
+        String newOriginalURL = "https://www.youtube.com/";
         URL url = new URL();
         url.setShortURL(shortURL);
-        url.setLongURL("https://www.example.com");
+        url.setLongURL("https://www.i.ua/");
         url.setCreateDate(new Date());
         url.setExpiryDate(new Date(System.currentTimeMillis() + 3600000)); // Через годину
         url.setClickCount(0);
@@ -195,5 +193,4 @@ class URLServiceImplTest {
         assertEquals("shortURL", dto.getShortURL());
         assertEquals("longURL", dto.getOriginalURL());
     }
-
 }
