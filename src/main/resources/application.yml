@@ -9,4 +9,4 @@ info:
 
 spring:
   profiles:
-    active: ua
+    active: production

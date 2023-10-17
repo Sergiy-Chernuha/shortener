@@ -22,6 +22,8 @@ repositories {
 }
 
 dependencies {
+
+    implementation "org.postgresql:postgeresql:42.6.0"
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -30,7 +32,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.26'
     implementation 'com.h2database:h2'
     implementation 'org.flywaydb:flyway-core:9.20.0'
-    implementation 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0'
