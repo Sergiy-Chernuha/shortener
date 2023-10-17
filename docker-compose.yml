@@ -4,7 +4,19 @@ services:
   db:
     image: postgres:alpine
     ports:
-      - "9999:9999"
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: password12345
       POSTGRES_DB: projectDb
+
+  app:
+    build: .
+    ports:
+      - "9999:9999"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/projectDb
+      SPRING_DATASOURCE_USERNAME: goit
+      SPRING_DATASOURCE_PASSWORD: password12345
+      SPRING_PROFILES_ACTIVE: production

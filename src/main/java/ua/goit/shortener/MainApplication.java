@@ -1,3 +1,4 @@
+/*
 package ua.goit.shortener;
 
 import org.springframework.boot.SpringApplication;
@@ -29,3 +30,4 @@ public class MainApplication {
         System.out.println("Short URL: " + shortURL);
     }
 }
+*/

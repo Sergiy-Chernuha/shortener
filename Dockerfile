@@ -1,9 +1,21 @@
-FROM postgres
+FROM gradle:7.3.3-jdk11 AS builder
 
-ENV POSTGRES_USER goit
+WORKDIR /app
 
-ENV POSTGRES_PASSWORD password12345
+COPY . .
 
-EXPOSE 9999:9999
+RUN ./gradlew shadowJar
 
-ENV POSTGRES_DB projectDb
+FROM openjdk:11
+
+COPY --from=builder /app/build/libs/your-app.jar /app.jar
+
+RUN apt-get update && apt-get install -y postgresql-client
+
+ENV POSTGRES_USER=goit
+
+ENV POSTGRES_PASSWORD=password12345
+
+ENV POSTGRES_DB=projectDb
+
+CMD ["java", "-jar", "/app.jar"]

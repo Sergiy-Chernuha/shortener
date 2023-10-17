@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.4'
     id 'io.spring.dependency-management' version '1.1.3'
+    id 'com.github.johnrengelman.shadow' version '7.0.0' // Додавання плагіну shadow
 }
 
 group = 'ua.goit'
@@ -22,8 +23,7 @@ repositories {
 }
 
 dependencies {
-
-    implementation "org.postgresql:postgeresql:42.6.0"
+    implementation "org.postgresql:postgresql"
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -40,4 +40,8 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+shadowJar {
+    archiveFileName = 'your-app.jar' // Замість archiveName використовуйте archiveFileName
 }
