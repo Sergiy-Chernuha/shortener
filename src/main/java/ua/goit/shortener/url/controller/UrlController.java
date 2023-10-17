@@ -37,6 +37,7 @@ public class UrlController {
 
         return ResponseEntity.ok(urlDTOs);
     }
+
     @GetMapping("/active/{userId}")
     public ResponseEntity<List<UrlDTO>> getActiveURLsByUserId(@PathVariable Long userId) {
         List<URL> activeUrls = crudUrlService.getAllURLsByUserId(userId);
@@ -81,7 +82,7 @@ public class UrlController {
         return ResponseEntity.ok(urlDTOs);
     }
 
-    @GetMapping("/info/shorter/t3/{shortURL}")
+    @GetMapping("/info/{shortURL}")
     public ResponseEntity<UrlDTO> getURLInfo(@PathVariable String shortURL) {
         UrlDTO urlInfo = urlServiceImpl.getURLInfo("shorter/t3/" + shortURL);
 
@@ -104,7 +105,7 @@ public class UrlController {
         }
     }
 
-    @DeleteMapping("/delete/shorter/t3/{shortURL}")
+    @DeleteMapping("/delete/{shortURL}")
     public ResponseEntity<Void> deleteURL(@PathVariable String shortURL) {
         String inputShortURL = "shorter/t3/" + shortURL;
         Optional<URL> existingURL = crudUrlService.getURLByShortURL(inputShortURL);
@@ -117,7 +118,7 @@ public class UrlController {
         }
     }
 
-    @PutMapping("/update/shorter/t3/{shortURL}")
+    @PutMapping("/update/{shortURL}")
     public ResponseEntity<String> updateURL(@PathVariable String shortURL, @RequestBody InputURLDTO inputURLDTO) {
         String newOriginalURL = inputURLDTO.getOriginalURL();
 
