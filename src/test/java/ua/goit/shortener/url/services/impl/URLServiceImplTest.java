@@ -64,7 +64,6 @@ class URLServiceImplTest {
         verify(mockCrudUrlService, times(1)).updateURL(url);
     }
 
-
     @Test
     public void testGetOriginalURLWithActiveURL() {
         CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
