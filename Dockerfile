@@ -1,4 +1,4 @@
-FROM gradle:7.3.3-jdk11 AS builder
+FROM gradle:7.3.3-jdk17 AS builder
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ COPY . .
 
 RUN ./gradlew shadowJar
 
-FROM openjdk:11
+FROM openjdk:17
 
 COPY --from=builder /app/build/libs/your-app.jar /app.jar
 
