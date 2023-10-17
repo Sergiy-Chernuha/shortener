@@ -3,7 +3,7 @@ package ua.goit.shortener.user.dto;
 import lombok.Data;
 
 @Data
-public class UserDTO {
-    private Long id;
+public class JwtRequest {
     private String username;
+    private String password;
 }

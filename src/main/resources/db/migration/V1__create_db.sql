@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS USERS (
     id bigint generated always as identity PRIMARY KEY,
-    nick_name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     password VARCHAR(1024) NOT NULL
 );
 

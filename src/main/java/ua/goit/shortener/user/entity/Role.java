@@ -9,13 +9,9 @@ import lombok.Data;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column
-    private ERole name;
-
-    public Role(ERole name) {
-        this.name = name;
-    }
+    @Column(name = "name")
+    private String name;
 }
