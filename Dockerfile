@@ -4,11 +4,13 @@ WORKDIR /app
 
 COPY . .
 
-RUN ./gradlew shadowJar
+RUN #./gradlew shadowJar
+RUN ./gradlew jar
 
 FROM openjdk:17
 
-COPY --from=builder /app/build/libs/your-app.jar /app.jar
+#COPY --from=builder /app/build/libs/your-app.jar /app.jar
+COPY --from=builder build/libs/shortener.jar /app.jar
 
 RUN apt-get update && apt-get install -y postgresql-client
 
