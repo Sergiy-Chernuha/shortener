@@ -18,6 +18,7 @@ public class MainApplication {
         User user = new User();
         user.setNickName("user2");
         user.setPassword("1234567");
+        user.setEmail("test@test.com");
         userServices.saveUser(user);
 
         URLServiceImpl urlService = context.getBean(URLServiceImpl.class);
