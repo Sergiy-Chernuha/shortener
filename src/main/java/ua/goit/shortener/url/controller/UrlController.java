@@ -29,30 +29,33 @@ public class UrlController {
         this.urlServiceImpl = urlServiceImpl;
     }
 
-    //    @GetMapping("/active")
-//    public ResponseEntity<List<UrlDTO>> getActiveURLs() {
-//        List<URL> activeUrls = crudUrlService.getAllURLs();
-//        List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
-//
-//        return ResponseEntity.ok(urlDTOs);
-//    }
-    @GetMapping("/active")
+        @GetMapping("/active")
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
-        List<URL> allUrls = crudUrlService.getAllURLs();
+        List<URL> activeUrls = crudUrlService.getAllURLs();
+        List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
 
-        LocalDate currentDate = LocalDate.now();
+        return ResponseEntity.ok(urlDTOs);
+    }
+    @GetMapping("/active/{userId}")
+    public ResponseEntity<List<UrlDTO>> getActiveURLsByUserId(@PathVariable Long userId) {
+        List<URL> activeUrls = crudUrlService.getAllURLsByUserId(userId);
+        List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
 
-        List<UrlDTO> urlDTOs = allUrls
+        return ResponseEntity.ok(urlDTOs);
+    }
+
+    private ResponseEntity<List<UrlDTO>> getListResponseEntity(LocalDate currentDate, List<URL> userUrls) {
+        List<UrlDTO> activeUserUrls = userUrls
                 .stream()
                 .filter(url -> {
                     Date expiryDate = url.getExpiryDate();
                     LocalDate localExpiryDate = expiryDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    return localExpiryDate.isAfter(currentDate);
+                    return localExpiryDate.isAfter(currentDate); // Filter URLs with expiry date in the future
                 })
                 .map(urlServiceImpl::mapToDTO)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(urlDTOs);
+        return ResponseEntity.ok(activeUserUrls);
     }
 
     @GetMapping("/all")
