@@ -1,6 +1,7 @@
 package ua.goit.shortener.url.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Qualifier("V1")
 public class CrudUrlServiceImpl implements CrudUrlService {
     private final URLRepository urlRepository;
 

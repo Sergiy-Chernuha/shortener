@@ -27,7 +27,7 @@ class URLServiceImplTest {
     }
 
     @Test
-    void getOriginalURL() {
+    void getActiveURL() {
     }
 
     @Test

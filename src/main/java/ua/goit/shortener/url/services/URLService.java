@@ -15,10 +15,10 @@ public interface URLService {
     //перевірка на валідність короткого url
     UrlDTO getURLInfo(String shortURL);
 
-    void incrementClickCount(String shortURL);
+    void incrementClickCount(URL shortURL);
 
     //лічильник переходів
-    String getOriginalURL(String shortUrl);
+    URL getActiveURL(String shortUrl);
 
     //отримання оригінального юрл
     String saveShortURL(Long userId, String originalURL);
