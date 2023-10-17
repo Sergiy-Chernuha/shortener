@@ -11,6 +11,7 @@ import ua.goit.shortener.user.services.UserServices;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -34,7 +35,9 @@ public class URLServiceImpl implements URLService {
         url.setLongURL(originalURL);
         url.setCreateDate(new Date()); //дата створення
         url.setClickCount(0); // кількість переходів
-        User user = userServices.findUser(userId).orElseThrow(); // Отримати користувача за ідентифікатором
+        User user = userServices.findUser(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found for userId: " + userId));
+        // Отримати користувача за ідентифікатором
         url.setUser(user); // Призначити користувача URL
         url.setExpiryShortURL(); // Встановити термін придатності URL
         crudUrlService.saveURL(url);

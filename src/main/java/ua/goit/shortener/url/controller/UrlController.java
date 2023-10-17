@@ -10,12 +10,15 @@ import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
 import ua.goit.shortener.url.services.impl.URLServiceImpl;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping({"/api/v1/urls","/api/v2/urls"})
+@RequestMapping({"/api/v1/urls", "/api/v2/urls"})
 public class UrlController {
     private final CrudUrlService crudUrlService;
     private final URLServiceImpl urlServiceImpl;
@@ -26,10 +29,28 @@ public class UrlController {
         this.urlServiceImpl = urlServiceImpl;
     }
 
+    //    @GetMapping("/active")
+//    public ResponseEntity<List<UrlDTO>> getActiveURLs() {
+//        List<URL> activeUrls = crudUrlService.getAllURLs();
+//        List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(urlDTOs);
+//    }
     @GetMapping("/active")
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
-        List<URL> activeUrls = crudUrlService.getAllURLs();
-        List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
+        List<URL> allUrls = crudUrlService.getAllURLs();
+
+        LocalDate currentDate = LocalDate.now();
+
+        List<UrlDTO> urlDTOs = allUrls
+                .stream()
+                .filter(url -> {
+                    Date expiryDate = url.getExpiryDate();
+                    LocalDate localExpiryDate = expiryDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    return localExpiryDate.isAfter(currentDate);
+                })
+                .map(urlServiceImpl::mapToDTO)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(urlDTOs);
     }
@@ -48,6 +69,14 @@ public class UrlController {
         return ResponseEntity.ok(urlDTOs);
     }
 
+    @GetMapping("/all/{userId}")
+    public ResponseEntity<List<UrlDTO>> getAllURLs(@PathVariable Long userId) {
+        List<URL> urls = crudUrlService.getAllURLsByUserId(userId);
+        List<UrlDTO> urlDTOs = urls.stream().map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
+
+        return ResponseEntity.ok(urlDTOs);
+    }
+
     @GetMapping("/info/shorter/t3/{shortURL}")
     public ResponseEntity<UrlDTO> getURLInfo(@PathVariable String shortURL) {
         UrlDTO urlInfo = urlServiceImpl.getURLInfo("shorter/t3/" + shortURL);
@@ -62,7 +91,7 @@ public class UrlController {
     @PostMapping("/create")
     public ResponseEntity<String> createShortURL(@RequestBody InputURLDTO inputURL) {
         if (urlServiceImpl.isValidURL(inputURL.getOriginalURL())) {
-            Long userId = 1L;
+            Long userId = inputURL.getUserId();
             String shortURL = urlServiceImpl.saveShortURL(userId, inputURL.getOriginalURL());
 
             return ResponseEntity.ok(shortURL);
