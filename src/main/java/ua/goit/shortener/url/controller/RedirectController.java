@@ -33,6 +33,8 @@ public class RedirectController {
 
         if (originalURL != null) {
             response.sendRedirect(originalURL);
+        }else{
+            response.sendError(404,"Коротка URL-адреса не знайдена або термін дії минув");
         }
     }
 }
