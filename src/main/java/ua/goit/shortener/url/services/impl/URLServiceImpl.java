@@ -1,9 +1,11 @@
 package ua.goit.shortener.url.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
+import ua.goit.shortener.url.services.CrudUrlService;
 import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.user.entity.User;
 import ua.goit.shortener.user.services.UserServices;
@@ -15,12 +17,13 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
+@Qualifier("V1")
 public class URLServiceImpl implements URLService {
     private final UserServices userServices;
-    private final CrudUrlServiceImpl crudUrlService;
+    private final CrudUrlService crudUrlService;
 
     @Autowired
-    public URLServiceImpl(UserServices userServices, CrudUrlServiceImpl crudUrlService) {
+    public URLServiceImpl(UserServices userServices, CrudUrlService crudUrlService) {
         this.userServices = userServices;
         this.crudUrlService = crudUrlService;
     }
@@ -85,26 +88,22 @@ public class URLServiceImpl implements URLService {
     }
 
     @Override
-    public void incrementClickCount(String shortURL) {
-        Optional<URL> urlByShortURL = crudUrlService.getURLByShortURL(shortURL);
-
-        if (urlByShortURL.isPresent()) {
-            URL url = urlByShortURL.get();
+    public void incrementClickCount(URL url) {
             Integer clickCount = url.getClickCount();
+
             clickCount++;
             url.setClickCount(clickCount);
-            crudUrlService.updateURL(url);
-        }
+            crudUrlService.saveURL(url);
     }
 
     @Override
-    public String getOriginalURL(String shortURL) {
-        Optional<URL> urls = crudUrlService.getURLByShortURL(shortURL);
+    public URL getActiveURL(String shortURL) {
+        Optional<URL> urlFromDB = crudUrlService.getURLByShortURL(shortURL);
 
-        if (urls.isPresent() && isActiveShortURL(urls.get())) {
-            incrementClickCount(shortURL);
+        if (urlFromDB.isPresent() && isActiveShortURL(urlFromDB.get())) {
+            incrementClickCount(urlFromDB.get());
 
-            return urls.get().getLongURL();
+            return urlFromDB.get();
         } else {
             return null;
         }
@@ -141,6 +140,7 @@ public class URLServiceImpl implements URLService {
         }
     }
 
+    //оновлює усі данні для shortURL
     @Override
     public boolean updateShortURL(String shortURL, String newOriginUrl) {
         Optional<URL> urls = crudUrlService.getURLByShortURL(shortURL);
