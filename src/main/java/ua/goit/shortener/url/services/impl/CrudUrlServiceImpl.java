@@ -56,4 +56,10 @@ public class CrudUrlServiceImpl implements CrudUrlService {
             return null;
         }
     }
+
+    @Override
+    public List<URL> getAllURLsByUserId(Long userId) {
+        List<URL> urls = urlRepository.findAllByUserId(userId);
+        return urls;
+    }
 }

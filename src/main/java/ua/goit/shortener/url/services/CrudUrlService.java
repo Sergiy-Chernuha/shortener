@@ -16,4 +16,6 @@ public interface CrudUrlService {
     void deleteURL(String shortURL);
 
     URL updateURL(URL url);
+
+    List<URL> getAllURLsByUserId(Long userId);
 }
