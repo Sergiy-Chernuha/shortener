@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:postgresql:team3-testdb.cv2h6ytr7csv.eu-north-1.rds.amazonaws.com
+    username: '${DB_USERNAME}'
+    password: '${DB_PASSWORD}'
+    name: shortener

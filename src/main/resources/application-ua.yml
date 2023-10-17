@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    username: goit
+    password: password12345
+    url: jdbc:postgresql://localhost:9999/shortener
+
+  sql:
+    init:
+      mode: always

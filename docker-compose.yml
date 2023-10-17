@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:alpine
+    ports:
+      - "9999:9999"
+    environment:
+      POSTGRES_PASSWORD: password12345
+      POSTGRES_DB: projectDb
