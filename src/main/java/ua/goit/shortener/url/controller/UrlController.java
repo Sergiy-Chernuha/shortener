@@ -30,7 +30,7 @@ public class UrlController {
         this.urlServiceImpl = urlServiceImpl;
     }
 
-        @GetMapping("/active")
+    @GetMapping("/active")
     public ResponseEntity<List<UrlDTO>> getActiveURLs() {
         List<URL> activeUrls = crudUrlService.getAllURLs();
         List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
