@@ -7,6 +7,7 @@ import java.util.Optional;
 
 @Service
 public interface UserServices {
+    void deleteUser(Long id);
     Optional<User> findUser(Long id);
     User saveUser(User user);
     Optional<User> findByEmail(String email);
