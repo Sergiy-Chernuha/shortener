@@ -67,6 +67,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(new AntPathRequestMatcher("/api/test/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/v1/urls/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/v2/urls/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -74,10 +75,4 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .requestMatchers("/v3/api-docs/**")
-                .requestMatchers("/swagger-ui.html")
-                .requestMatchers("/swagger-ui/**");
     }
-}
