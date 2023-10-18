@@ -1,23 +1,12 @@
-FROM gradle:7.3.3-jdk17 AS builder
+FROM openjdk:17
+
+ENV POSTGRES_USER=goit
+ENV POSTGRES_PASSWORD=password12345
+ENV POSTGRES_DB=projectDb
+ENV POSTGRES_URL=team3-testdb.cv2h6ytr7csv.eu-north-1.rds.amazonaws.com
 
 WORKDIR /app
 
-COPY . .
+ADD build/libs/*.jar /app/shortener.jar
 
-RUN #./gradlew shadowJar
-RUN ./gradlew jar
-
-FROM openjdk:17
-
-#COPY --from=builder /app/build/libs/your-app.jar /app.jar
-COPY --from=builder build/libs/shortener.jar /app.jar
-
-RUN apt-get update && apt-get install -y postgresql-client
-
-ENV POSTGRES_USER=goit
-
-ENV POSTGRES_PASSWORD=password12345
-
-ENV POSTGRES_DB=projectDb
-
-CMD ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=production", "-jar", "shortener.jar"]
