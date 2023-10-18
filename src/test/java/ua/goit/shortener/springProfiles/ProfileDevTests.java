@@ -10,25 +10,25 @@ import org.springframework.util.Assert;
 
 import java.util.Objects;
 
-//@SpringBootTest
-//@ActiveProfiles("dev")
-//class ProfileDevTests {
-//
-//    @Autowired
-//    Environment environment;
-//
-//    @Test
-//    void profileIsDev() {
-//        String expected = environment.getProperty("test_prop");
-//        String actual = "DEV";
-//
-//        Assertions.assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void profileIsNotDev() {
-//        String actual = environment.getProperty("test_prop");
-//
-//        Assert.isTrue(Objects.equals(actual, "DEV"), "INCORRECT ENVIRONMENT CONFIG");
-//    }
-//}
+@SpringBootTest
+@ActiveProfiles("dev")
+class ProfileDevTests {
+
+    @Autowired
+    Environment environment;
+
+    @Test
+    void profileIsDev() {
+        String expected = environment.getProperty("test_prop");
+        String actual = "DEV";
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void profileIsNotDev() {
+        String actual = environment.getProperty("test_prop");
+
+        Assert.isTrue(Objects.equals(actual, "DEV"), "INCORRECT ENVIRONMENT CONFIG");
+    }
+}
