@@ -7,7 +7,8 @@ import ua.goit.shortener.url.services.impl.URLServiceImpl;
 import ua.goit.shortener.user.entity.User;
 import ua.goit.shortener.user.services.impl.UserServicesImpl;
 
-@SpringBootApplication
+
+//@SpringBootApplication
 public class MainApplication {
 
 //CLASS ONLY FOR TESTING!!!!

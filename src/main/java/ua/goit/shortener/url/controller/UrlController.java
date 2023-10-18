@@ -8,7 +8,7 @@ import ua.goit.shortener.url.dto.InputURLDTO;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
-import ua.goit.shortener.url.services.impl.URLServiceImpl;
+import ua.goit.shortener.url.services.URLService;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 @RequestMapping({"/api/v1/urls","/api/v2/urls"})
 public class UrlController {
     private final CrudUrlService crudUrlService;
-    private final URLServiceImpl urlServiceImpl;
+    private final URLService urlServiceImpl;
 
     @Autowired
-    public UrlController(CrudUrlService crudUrlService, URLServiceImpl urlServiceImpl) {
+    public UrlController(CrudUrlService crudUrlService, URLService urlServiceImpl) {
         this.crudUrlService = crudUrlService;
         this.urlServiceImpl = urlServiceImpl;
     }
