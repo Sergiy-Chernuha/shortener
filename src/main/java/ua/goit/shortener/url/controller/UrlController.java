@@ -46,20 +46,6 @@ public class UrlController {
         return ResponseEntity.ok(urlDTOs);
     }
 
-    private ResponseEntity<List<UrlDTO>> getListResponseEntity(LocalDate currentDate, List<URL> userUrls) {
-        List<UrlDTO> activeUserUrls = userUrls
-                .stream()
-                .filter(url -> {
-                    Date expiryDate = url.getExpiryDate();
-                    LocalDate localExpiryDate = expiryDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    return localExpiryDate.isAfter(currentDate); // Filter URLs with expiry date in the future
-                })
-                .map(urlServiceImpl::mapToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(activeUserUrls);
-    }
-
     @GetMapping("/all")
     public ResponseEntity<List<UrlDTO>> getAllURLs(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
