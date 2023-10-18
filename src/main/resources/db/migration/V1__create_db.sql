@@ -12,7 +12,7 @@
 --    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 --);
 create table users (
-  ID BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id bigint generated always as identity PRIMARY KEY,
   username              varchar(30) not null unique,
   password              varchar(80) not null,
   email                 varchar(50) unique
