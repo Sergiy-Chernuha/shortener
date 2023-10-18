@@ -4,8 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import ua.goit.shortener.url.dto.UrlDTO;
-import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.user.entity.User;
+
+import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
 import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.user.services.UserServices;
