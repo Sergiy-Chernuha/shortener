@@ -16,3 +16,6 @@ Environment variables:
 By default active Spring Profile is dev.
 to run in production  mode:
 java -Dspring.profiles.active=production -jar shortener-0.0.1-SNAPSHOT.jar
+
+
+Links to swagger documentation: http://localhost:9999/swagger-ui/index.html
