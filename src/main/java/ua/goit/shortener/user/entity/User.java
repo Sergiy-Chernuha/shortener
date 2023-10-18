@@ -2,6 +2,7 @@ package ua.goit.shortener.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ua.goit.shortener.url.entity.URL;
 
 import java.util.ArrayList;
@@ -12,16 +13,17 @@ import java.util.Set;
 @Entity
 @Table(name = "USERS",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "USER_NAME"),
+                @UniqueConstraint(columnNames = "USERNAME"),
                 @UniqueConstraint(columnNames = "EMAIL")
         })
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USER_NAME")
+    @Column(name = "USERNAME")
     private String username;
 
     @Column(name = "EMAIL")
@@ -31,7 +33,7 @@ public class User {
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
