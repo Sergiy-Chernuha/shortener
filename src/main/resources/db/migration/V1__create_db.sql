@@ -4,13 +4,13 @@
 --    password VARCHAR(1024) NOT NULL
 --);
 --
---CREATE TABLE IF NOT EXISTS URL (
---    short_url VARCHAR(200) PRIMARY KEY,
---    long_url VARCHAR(1024) NOT NULL,
---    create_date TIMESTAMP(8) NOT NULL,
---    clicks_count INTEGER NOT NULL,
+CREATE TABLE  URL (
+    short_url VARCHAR(200) PRIMARY KEY,
+    long_url VARCHAR(1024) NOT NULL,
+    create_date TIMESTAMP(8) NOT NULL,
+    clicks_count INTEGER NOT NULL
 --    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
---);
+);
 create table users (
   id bigint generated always as identity PRIMARY KEY,
   username              varchar(30) not null unique,
