@@ -1,10 +1,3 @@
---CREATE TABLE IF NOT EXISTS USERS (
---    id bigint generated always as identity PRIMARY KEY,
---    nick_name VARCHAR(255) NOT NULL,
---    password VARCHAR(1024) NOT NULL
---);
---
-
 create table users
 (
     id       bigint generated always as identity PRIMARY KEY,
@@ -24,7 +17,7 @@ CREATE TABLE URL
 );
 create table roles
 (
-    ID   BIGINT PRIMARY KEY AUTO_INCREMENT,
+    ID   bigint generated always as identity PRIMARY KEY,
     name varchar(50) not null
 );
 
