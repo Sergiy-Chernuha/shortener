@@ -18,9 +18,10 @@ jobs:
     - uses: actions/checkout@v3
     - name: Set Environment Variables
       run: |
-          echo "::set-env name=DB_URL::${{ env.LOCAL_DB_URL }}"
-          echo "::set-env name=DB_NAME::${{ env.LOCAL_DB_NAME }}"
-          echo "::set-env name=DB_PASS::${{ env.LOCAL_DB_PASS }}"
+          echo "DB_URL=${{ env.LOCAL_DB_URL }}" >> .env
+          echo "DB_NAME=${{ env.LOCAL_DB_NAME }}" >> .env
+          echo "DB_PASS=${{ env.LOCAL_DB_PASS }}" >> .env
+          echo "source .env"
         
     - name: Set up JDK 17
       uses: actions/setup-java@v3
