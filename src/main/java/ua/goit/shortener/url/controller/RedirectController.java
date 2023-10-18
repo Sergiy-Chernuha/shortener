@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ua.goit.shortener.url.services.CacheUrlService;
 
 import java.io.IOException;
 
+@RequestMapping({"/api/v1/urls", "/api/v2/urls"})
 @Controller
 public class RedirectController {
     private final CacheUrlService cacheUrlService;
