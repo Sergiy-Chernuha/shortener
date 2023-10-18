@@ -48,59 +48,6 @@ class URLServiceImplTest {
     }
 
     @Test
-    public void testIncrementClickCount() {
-//        CrudUrlServiceImpl mockCrudUrlService = mock(CrudUrlServiceImpl.class);
-//        URLServiceImpl urlService = new URLServiceImpl(null, mockCrudUrlService);
-//
-//        URL url = new URL();
-//        url.setShortURL("shortURL");
-//        url.setClickCount(0);
-//
-//        when(mockCrudUrlService.getURLByShortURL("shortURL")).thenReturn(Optional.of(url));
-//
-//        urlService.incrementClickCount("shortURL");
-//
-//        verify(mockCrudUrlService, times(1)).getURLByShortURL("shortURL");
-//        verify(mockCrudUrlService, times(1)).updateURL(url);
-    }
-
-    @Test
-    public void testGetOriginalURLWithActiveURL() {
-//        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
-//
-//        URLServiceImpl urlService = new URLServiceImpl(null, crudUrlService);
-//
-//        URL url = new URL();
-//        url.setShortURL("shortURL");
-//        url.setLongURL("https://www.i.ua/");
-//
-//        when(crudUrlService.getURLByShortURL("shortURL")).thenReturn(Optional.of(url));
-//
-//        String originalURL = urlService.getOriginalURL("shortURL");
-//
-//        verify(crudUrlService, times(1)).getURLByShortURL("shortURL");
-    }
-
-    @Test
-    public void testGetOriginalURLWithExpiredURL() {
-//        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
-//
-//        URLServiceImpl urlService = new URLServiceImpl(null, crudUrlService);
-//
-//        URL url = new URL();
-//        url.setShortURL("shortURL");
-//        url.setLongURL("https://www.i.ua/");
-//
-//        when(crudUrlService.getURLByShortURL("shortURL")).thenReturn(Optional.of(url));
-//
-//        String originalURL = urlService.getOriginalURL("shortURL");
-//
-//        verify(crudUrlService, times(1)).getURLByShortURL("shortURL");
-//
-//        assertEquals(null, originalURL);
-    }
-
-    @Test
     public void testGenerateRandomString() {
         URLServiceImpl urlService = new URLServiceImpl(null, null);
         int length = 8;
