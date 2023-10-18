@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface URLRepository extends JpaRepository<URL, String> {
-    List<URL> findByShortURLContaining(String shortURL);
-
+    List<URL> findAllByUserId(Long userId);
 }

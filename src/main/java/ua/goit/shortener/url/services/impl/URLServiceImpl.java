@@ -1,48 +1,32 @@
 package ua.goit.shortener.url.services.impl;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
-import ua.goit.shortener.url.repositories.URLRepository;
+import ua.goit.shortener.url.services.CrudUrlService;
 import ua.goit.shortener.url.services.URLService;
 import ua.goit.shortener.user.entity.User;
-import ua.goit.shortener.user.repositories.UserRepository;
+import ua.goit.shortener.user.services.UserServices;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Date;
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
+@Qualifier("V1")
 public class URLServiceImpl implements URLService {
-    private final OkHttpClient httpClient = new OkHttpClient();
-    private final URLRepository urlRepository;
-    private final UserRepository userRepository;
+    private final UserServices userServices;
+    private final CrudUrlService crudUrlService;
 
     @Autowired
-    public URLServiceImpl(URLRepository urlRepository, UserRepository userRepository) {
-        this.urlRepository = urlRepository;
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public boolean isValidURL(String originalURL) {
-        Request request = new Request.Builder()
-                .url(originalURL)
-                .build();
-
-        try (Response response = httpClient.newCall(request).execute()) {
-            // якщо код 200 то все ок
-            return response.isSuccessful();
-        } catch (IOException e) {
-            // помилка при виконанні , URL недоступний
-            return false;
-        }
+    public URLServiceImpl(UserServices userServices, CrudUrlService crudUrlService) {
+        this.userServices = userServices;
+        this.crudUrlService = crudUrlService;
     }
 
     @Override
@@ -52,11 +36,13 @@ public class URLServiceImpl implements URLService {
 
         url.setShortURL(shortURL);
         url.setLongURL(originalURL);
-        url.setCreateDate(new Date()); //дата створення
-        url.setClicks(0); // кількість переходів
-        User user = userRepository.getOne(userId); // Отримати користувача за ідентифікатором
-        url.setUser(user); // Призначити користувача URL
-        urlRepository.save(url);
+        url.setCreateDate(new Date());
+        url.setClickCount(0);
+        User user = userServices.findUser(userId).orElseThrow(() -> new NoSuchElementException("User not found for userId: " + userId));
+        // користувач за ідентифікатором
+        url.setUser(user);
+        url.setExpiryShortURL();
+        crudUrlService.saveURL(url);
 
         return shortURL;
     }
@@ -64,42 +50,65 @@ public class URLServiceImpl implements URLService {
     @Override
     public String createShortURL(String originalURL) {
         // генерація посилання
-        String prefix = "https://shorter/t3/";
-        int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
-        String randomString = generateRandomString(randomLength);
+        String prefix = "shorter/t3/";
 
-        return prefix + randomString;
+        while (true) {
+            int randomLength = 6 + new Random().nextInt(3); // довжина від 6 до 8 символів
+            String randomString = generateRandomString(randomLength);
+            String shortURL = prefix + randomString;
+
+            if (isShortUrlUnique(shortURL)) return shortURL;
+        }
     }
 
     @Override
-    public boolean isValidShortURL(String saveShortURL) {
+    public boolean isValidURL(String checkedURL) {
         try {
-            new java.net.URL(saveShortURL).toURI();
-
+            new java.net.URL(checkedURL).toURI();
             return true;
         } catch (URISyntaxException | MalformedURLException exception) {
-
             return false;
         }
     }
 
     @Override
-    public void incrementClickCount(String shortURL) {
+    public Boolean isActiveShortURL(URL checkedShortUrl) {
 
+        if (checkedShortUrl == null) {
+            return false;
+        }
+
+        Date expiryDate = checkedShortUrl.getExpiryDate();
+        Date currentDate = new Date();
+
+        if (expiryDate == null) {
+            return false;
+        }
+
+        return expiryDate.after(currentDate);
     }
 
     @Override
-    public String getOriginalURL(String shortURL) {
-        List<URL> urls = urlRepository.findByShortURLContaining(shortURL);
+    public void incrementClickCount(URL url) {
+        Integer clickCount = url.getClickCount();
 
-        if (!urls.isEmpty()) {
-            URL findOriginalUrl = urls.get(0); // перший об'єкт зі списку
-            return findOriginalUrl.getLongURL();
+        clickCount++;
+        url.setClickCount(clickCount);
+        crudUrlService.saveURL(url);
+    }
+
+    @Override
+    public URL getActiveURL(String shortURL) {
+        Optional<URL> urlFromDB = crudUrlService.getURLByShortURL(shortURL);
+
+        if (urlFromDB.isPresent() && isActiveShortURL(urlFromDB.get())) {
+            incrementClickCount(urlFromDB.get());
+
+            return urlFromDB.get();
         } else {
             return null;
         }
     }
-
 
     //генератор строки
     public String generateRandomString(int length) {
@@ -113,5 +122,50 @@ public class URLServiceImpl implements URLService {
         }
 
         return randomString.toString();
+    }
+
+    //перевірка, чи існує short URL в БД
+    public boolean isShortUrlUnique(String url) {
+        Optional<URL> existingURLs = crudUrlService.getURLByShortURL(url);
+        return existingURLs.isEmpty();
+    }
+
+    @Override
+    public UrlDTO getURLInfo(String shortURL) {
+        Optional<URL> url = crudUrlService.getURLByShortURL(shortURL);
+
+        if (url.isPresent()) {
+            return mapToDTO(url.get());
+        } else {
+            return null;
+        }
+    }
+
+    //оновлює усі данні для shortURL
+    @Override
+    public boolean updateShortURL(String shortURL, String newOriginUrl) {
+        Optional<URL> urls = crudUrlService.getURLByShortURL(shortURL);
+
+        if (urls.isPresent()) {
+            URL updatedURL = urls.get();
+
+            updatedURL.setLongURL(newOriginUrl);
+            crudUrlService.updateURL(updatedURL);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public UrlDTO mapToDTO(URL url) {
+        UrlDTO dto = new UrlDTO();
+        dto.setShortURL(url.getShortURL());
+        dto.setOriginalURL(url.getLongURL());
+        dto.setCreateDate(url.getCreateDate());
+        dto.setExpiryDate(url.getExpiryDate());
+        dto.setClickCount(url.getClickCount());
+        return dto;
     }
 }
