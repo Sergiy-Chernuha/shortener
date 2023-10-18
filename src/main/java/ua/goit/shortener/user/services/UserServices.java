@@ -8,5 +8,6 @@ import java.util.Optional;
 @Service
 public interface UserServices {
     Optional<User> findUser(Long id);
-    void saveUser(User user);
+    User saveUser(User user);
+    Optional<User> findByEmail(String email);
 }
