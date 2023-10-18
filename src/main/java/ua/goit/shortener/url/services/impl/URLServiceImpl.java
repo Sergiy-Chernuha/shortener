@@ -36,13 +36,12 @@ public class URLServiceImpl implements URLService {
 
         url.setShortURL(shortURL);
         url.setLongURL(originalURL);
-        url.setCreateDate(new Date()); //дата створення
-        url.setClickCount(0); // кількість переходів
-        User user = userServices.findUser(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found for userId: " + userId));
-        // Отримати користувача за ідентифікатором
-        url.setUser(user); // Призначити користувача URL
-        url.setExpiryShortURL(); // Встановити термін придатності URL
+        url.setCreateDate(new Date());
+        url.setClickCount(0);
+        User user = userServices.findUser(userId).orElseThrow(() -> new NoSuchElementException("User not found for userId: " + userId));
+        // користувач за ідентифікатором
+        url.setUser(user);
+        url.setExpiryShortURL();
         crudUrlService.saveURL(url);
 
         return shortURL;
@@ -58,8 +57,7 @@ public class URLServiceImpl implements URLService {
             String randomString = generateRandomString(randomLength);
             String shortURL = prefix + randomString;
 
-            if (isShortUrlUnique(shortURL))
-                return shortURL;
+            if (isShortUrlUnique(shortURL)) return shortURL;
         }
     }
 
@@ -92,11 +90,11 @@ public class URLServiceImpl implements URLService {
 
     @Override
     public void incrementClickCount(URL url) {
-            Integer clickCount = url.getClickCount();
+        Integer clickCount = url.getClickCount();
 
-            clickCount++;
-            url.setClickCount(clickCount);
-            crudUrlService.saveURL(url);
+        clickCount++;
+        url.setClickCount(clickCount);
+        crudUrlService.saveURL(url);
     }
 
     @Override

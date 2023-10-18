@@ -8,11 +8,4 @@ public class InputURLDTO {
     private String originalURL;
     @Getter
     private Long userId;
-    public InputURLDTO() {
-    }
-
-    public InputURLDTO(String originalURL) {
-        this.originalURL = originalURL;
-    }
-
 }

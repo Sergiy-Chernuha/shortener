@@ -31,14 +31,16 @@ public class URL {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+
     public URL(String shortURL) {
     }
+
     public URL() {
     }
 
     public void setExpiryShortURL() {
         // Встановлюємо термін придатності на 2 доби від поточної дати створення
         LocalDateTime newExpiryDate = LocalDateTime.ofInstant(createDate.toInstant(), ZoneId.systemDefault()).plusDays(2);
-        this.expiryDate= Date.from(newExpiryDate.atZone(ZoneId.systemDefault()).toInstant());
+        this.expiryDate = Date.from(newExpiryDate.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

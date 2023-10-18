@@ -11,9 +11,6 @@ import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
 import ua.goit.shortener.url.services.URLService;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,20 +41,6 @@ public class UrlController {
         List<UrlDTO> urlDTOs = activeUrls.stream().filter(urlServiceImpl::isActiveShortURL).map(urlServiceImpl::mapToDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(urlDTOs);
-    }
-
-    private ResponseEntity<List<UrlDTO>> getListResponseEntity(LocalDate currentDate, List<URL> userUrls) {
-        List<UrlDTO> activeUserUrls = userUrls
-                .stream()
-                .filter(url -> {
-                    Date expiryDate = url.getExpiryDate();
-                    LocalDate localExpiryDate = expiryDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    return localExpiryDate.isAfter(currentDate); // Filter URLs with expiry date in the future
-                })
-                .map(urlServiceImpl::mapToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(activeUserUrls);
     }
 
     @GetMapping("/all")
