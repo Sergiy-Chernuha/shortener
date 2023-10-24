@@ -1,5 +1,6 @@
 package ua.goit.shortener.url.services.impl;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.url.entity.URL;
@@ -8,7 +9,7 @@ import ua.goit.shortener.url.services.URLService;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@Hidden
 @Service
 @Qualifier("V1")
 public class CacheUrlServiceImpl implements CacheUrlService {

@@ -1,5 +1,6 @@
 package ua.goit.shortener.url.services.impl;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import ua.goit.shortener.url.services.CrudUrlService;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
+@Hidden
 @Service
 @Qualifier("V1")
 public class CrudUrlServiceImpl implements CrudUrlService {
