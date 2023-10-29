@@ -1,5 +1,6 @@
 package ua.goit.shortener.user.services.impl;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ua.goit.shortener.user.entity.User;
 import ua.goit.shortener.user.repositories.UserRepository;
-
+@Hidden
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

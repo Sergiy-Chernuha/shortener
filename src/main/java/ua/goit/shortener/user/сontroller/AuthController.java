@@ -1,5 +1,7 @@
 package ua.goit.shortener.user.сontroller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,6 +48,14 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/signin")
+    @Operation(
+            summary = "Authenticate User",
+            description = "Authenticate a user with a username and password. Returns a JWT token upon successful authentication.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Authentication successful"),
+                    @ApiResponse(responseCode = "400", description = "Bad request or invalid credentials")
+            }
+    )
     public ResponseEntity<?> authUser(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager
@@ -69,6 +79,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @Operation(
+            summary = "Register User",
+            description = "Register a new user. Returns a message upon successful registration.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User registered successfully"),
+                    @ApiResponse(responseCode = "400", description = "Bad request or username/email already exists")
+            }
+    )
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
 
         if (userRepository.existsByUsername(signupRequest.getUsername())) {

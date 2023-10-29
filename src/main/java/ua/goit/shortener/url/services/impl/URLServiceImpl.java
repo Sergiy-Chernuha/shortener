@@ -1,5 +1,6 @@
 package ua.goit.shortener.url.services.impl;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
-
+@Hidden
 @Service
 @Qualifier("V1")
 public class URLServiceImpl implements URLService {

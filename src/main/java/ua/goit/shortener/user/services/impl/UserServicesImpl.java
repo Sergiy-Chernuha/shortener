@@ -1,5 +1,6 @@
 package ua.goit.shortener.user.services.impl;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.goit.shortener.user.entity.User;
@@ -7,7 +8,7 @@ import ua.goit.shortener.user.repositories.UserRepository;
 import ua.goit.shortener.user.services.UserServices;
 
 import java.util.Optional;
-
+@Hidden
 @Service
 public class UserServicesImpl implements UserServices {
     private final UserRepository usersRepository;

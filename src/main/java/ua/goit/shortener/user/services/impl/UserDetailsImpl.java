@@ -1,6 +1,7 @@
 package ua.goit.shortener.user.services.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +10,7 @@ import ua.goit.shortener.user.entity.User;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Hidden
 public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
