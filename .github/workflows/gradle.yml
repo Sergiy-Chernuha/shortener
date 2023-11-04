@@ -18,9 +18,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set Environment Variables
         run: |
-          echo "DB_URL=${{ env.LOCAL_DB_URL }}"
-          echo "DB_USERNAME=${{ env.LOCAL_DB_USERNAME }}"
-          echo "DB_PASSWORD=${{ env.LOCAL_DB_PASSWORD }}"
+          echo "DB_URL=${{ env.LOCAL_DB_URL }}" >> .env
+          echo "DB_USERNAME=${{ env.LOCAL_DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ env.LOCAL_DB_PASSWORD }}" >> .env
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
