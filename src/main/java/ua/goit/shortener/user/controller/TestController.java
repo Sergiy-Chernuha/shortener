@@ -1,4 +1,4 @@
-package ua.goit.shortener.user.сontroller;
+package ua.goit.shortener.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
