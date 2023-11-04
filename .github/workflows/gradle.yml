@@ -9,8 +9,8 @@ on:
 permissions:
   contents: read
 
-env:
-  LOCAL_DB_USERNAME: social
+#env:
+#  LOCAL_DB_USERNAME: social
 
 jobs:
   build:
