@@ -31,6 +31,6 @@ jobs:
       - name: Build with Gradle
         run: gradle clean test
         env:
-          DB_URL:jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
-          DB_USERNAME:social
-          DB_PASSWORD:parac3tam0l
+          DB_URL: jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
+          DB_USERNAME: social
+          DB_PASSWORD: parac3tam0l
