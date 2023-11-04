@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  LOCAL_DB_USERNAME: social
+
 jobs:
   build:
 
@@ -16,11 +19,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set Environment Variables
-        run:
-          DB_URL=jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
-          DB_USERNAME=social
-          DB_PASSWORD=parac3tam0l
+#      - name: Set Environment Variables
+#      -env:
+#        DB_URL=jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
+#        DB_USERNAME=social
+#        DB_PASSWORD=parac3tam0l
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -30,10 +33,10 @@ jobs:
 
       - name: Build with Gradle
         run: gradle clean test
-#        env:
-#          DB_URL: jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
-#          DB_USERNAME: echo ${{ env.LOCAL_DB_USERNAME }}
-#          DB_PASSWORD: parac3tam0l
+        env:
+          DB_URL: jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
+          DB_USERNAME: echo ${{ env.LOCAL_DB_USERNAME }}
+          DB_PASSWORD: parac3tam0l
 
 #          echo "DB_URL=${{ env.LOCAL_DB_URL }}" >> .env
 #          echo "DB_USERNAME=${{ env.LOCAL_DB_USERNAME }}" >> .env
