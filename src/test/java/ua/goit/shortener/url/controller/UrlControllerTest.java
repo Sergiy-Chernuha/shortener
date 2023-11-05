@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.url.entity.URL;
@@ -37,6 +38,7 @@ class UrlControllerTest {
     URLService urlServiceImpl;
 
     @Test
+    @WithMockUser(username = "user1", password = "pwd", roles = "USER")
     void getAllURLs() throws Exception {
         URL ulr1 = new URL();
         ulr1.setShortURL("short_url1");
@@ -63,6 +65,7 @@ class UrlControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user1", password = "pwd", roles = "USER")
     void getActiveURLs() throws Exception {
         URL ulr1 = new URL();
         ulr1.setShortURL("isActive");
