@@ -9,10 +9,6 @@ on:
 permissions:
   contents: read
 
-#env:
-#  LOCAL_DB_USERNAME: social
-
-
 jobs:
   build:
 
@@ -20,30 +16,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-#      - name: Set Environment Variables
-#        run: |
-#          echo "DB_URL=${{ env.LOCAL_DB_URL }}" >> .env
-#          echo "DB_USERNAME=${{ env.LOCAL_DB_USERNAME }}" >> .env
-#          echo "DB_PASSWORD=${{ env.LOCAL_DB_PASSWORD }}" >> .env
-#          echo "source .env"
-#      -env:
-#        DB_URL=jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
-#        DB_USERNAME=social
-#        DB_PASSWORD=parac3tam0l
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-
       - name: Build with Gradle
         run: gradle clean test
         env:
           DB_URL: "${{ vars.LOCAL_DB_URL }}"
           DB_USERNAME: "${{ vars.LOCAL_DB_USERNAME }}"
           DB_PASSWORD: "${{ vars.LOCAL_DB_PASSWORD }}"
-
-#          echo "DB_URL=${{ env.LOCAL_DB_URL }}" >> .env
-#          echo "DB_USERNAME=${{ env.LOCAL_DB_USERNAME }}" >> .env
-#          echo "DB_PASSWORD=${{ env.LOCAL_DB_PASSWORD }}" >> .env
