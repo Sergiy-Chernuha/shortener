@@ -5,6 +5,7 @@ import ua.goit.shortener.url.entity.URL;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public interface CrudUrlService {
     List<URL> getAllURLs();
@@ -18,4 +19,5 @@ public interface CrudUrlService {
     URL updateURL(URL url);
 
     List<URL> getAllURLsByUserId(Long userId);
+
 }

@@ -1,0 +1,29 @@
+name: Java CI with Gradle
+run-name: ${{ github.actor }} run tests
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build with Gradle
+        run: gradle clean test
+        env:
+          DB_URL: "${{ vars.LOCAL_DB_URL }}"
+          DB_USERNAME: "${{ vars.LOCAL_DB_USERNAME }}"
+          DB_PASSWORD: "${{ vars.LOCAL_DB_PASSWORD }}"
