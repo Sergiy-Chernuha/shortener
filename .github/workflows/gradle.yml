@@ -20,12 +20,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set Environment Variables
-        run: |
-          echo "DB_URL=${{ env.LOCAL_DB_URL }}" >> .env
-          echo "DB_USERNAME=${{ env.LOCAL_DB_USERNAME }}" >> .env
-          echo "DB_PASSWORD=${{ env.LOCAL_DB_PASSWORD }}" >> .env
-          echo "source .env"
+#      - name: Set Environment Variables
+#        run: |
+#          echo "DB_URL=${{ env.LOCAL_DB_URL }}" >> .env
+#          echo "DB_USERNAME=${{ env.LOCAL_DB_USERNAME }}" >> .env
+#          echo "DB_PASSWORD=${{ env.LOCAL_DB_PASSWORD }}" >> .env
+#          echo "source .env"
 #      -env:
 #        DB_URL=jdbc:postgresql://ukranians.celuobfoolw5.us-east-2.rds.amazonaws.com:5432/ukr
 #        DB_USERNAME=social
