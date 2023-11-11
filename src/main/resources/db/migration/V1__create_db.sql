@@ -5,16 +5,18 @@ create table users
     password varchar(80) not null,
     email    varchar(50) unique
 );
+
 CREATE TABLE URL
 (
     short_url    VARCHAR(200) PRIMARY KEY,
     long_url     VARCHAR(1024) NOT NULL,
-    create_date  TIMESTAMP(8)  NOT NULL,
-    expiry_date  TIMESTAMP(8)  NOT NULL,
+    create_date  TIMESTAMP(6)  NOT NULL,
+    expiry_date  TIMESTAMP(6)  NOT NULL,
     clicks_count INTEGER       NOT NULL,
-    user_id      bigint not null,
-    foreign key (user_id) references users (id)
+    user_id      bigint        not null,
+    foreign key (user_id) references users (id) ON DELETE CASCADE
 );
+
 create table roles
 (
     ID   bigint generated always as identity PRIMARY KEY,
