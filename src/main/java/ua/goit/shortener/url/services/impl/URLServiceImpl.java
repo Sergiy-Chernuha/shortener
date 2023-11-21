@@ -92,8 +92,7 @@ public class URLServiceImpl implements URLService {
     @Override
     public void incrementClickCount(URL url) {
         Integer clickCount = url.getClickCount();
-
-        clickCount++;
+        clickCount = (clickCount == null) ? 1 : clickCount + 1;
         url.setClickCount(clickCount);
         crudUrlService.saveURL(url);
     }

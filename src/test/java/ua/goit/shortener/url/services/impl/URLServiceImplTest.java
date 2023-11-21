@@ -3,6 +3,12 @@ package ua.goit.shortener.url.services.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import ua.goit.shortener.url.controller.UrlController;
 import ua.goit.shortener.url.dto.UrlDTO;
 import ua.goit.shortener.user.entity.User;
 
