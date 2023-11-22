@@ -74,7 +74,6 @@ class URLServiceImplTestNew {
 
         String shortURL = urlService.createShortURL(originalURL);
         assertTrue(shortURL.startsWith("shorter/t3/"));
-        //чи треба тут перевірку на під'єднання
 
         String actualSubstring = shortURL.substring("shorter/t3/".length());
         assertTrue(actualSubstring.length() >= 6 && actualSubstring.length() <= 8);
@@ -89,11 +88,10 @@ class URLServiceImplTestNew {
         String validURL = "https://www.google.com";
         String invalidURL = "not a valid URL";
 
-        verify(urlService, times(1)).isValidURL(validURL);
-
         assertTrue(urlService.isValidURL(validURL));
         assertFalse(urlService.isValidURL(invalidURL));
     }
+
     @Test
     public void testIncrementClickCount() {
         UserServices userServices = mock(UserServices.class);
@@ -111,6 +109,7 @@ class URLServiceImplTestNew {
 
         verifyNoMoreInteractions(crudUrlService);
     }
+
     @Test
     public void testGetActiveURL() {
         UserServices userServices = mock(UserServices.class);
@@ -202,7 +201,7 @@ class URLServiceImplTestNew {
 
         assertNotNull(randomString);
         assertEquals(length, randomString.length());
-    }
+    }//перевірка на розриви і пробіли
 
     @Test
     public void testIsShortUrlUniqueWithUniqueURL() {
@@ -294,7 +293,5 @@ class URLServiceImplTestNew {
 
         assertEquals(shortURL, dto.getShortURL());
         assertEquals(longURL, dto.getOriginalURL());
-
     }
 }
-
