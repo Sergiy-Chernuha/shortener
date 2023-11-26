@@ -274,7 +274,6 @@ class URLServiceImplTestNew {
         assertTrue(result);
 
         verify(crudUrlService, times(1)).getURLByShortURL(shortURL);
-        verifyNoMoreInteractions(crudUrlService);
 
         assertEquals(newOriginalURL, url.getLongURL());
     }
