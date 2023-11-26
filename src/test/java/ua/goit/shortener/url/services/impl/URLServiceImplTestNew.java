@@ -201,8 +201,10 @@ class URLServiceImplTestNew {
 
         assertNotNull(randomString);
         assertEquals(length, randomString.length());
-    }//перевірка на розриви і пробіли
-
+        assertFalse(randomString.contains(" "), "String should not contain spaces");
+        assertFalse(randomString.contains("\n"), "String should not contain line breaks");
+        assertFalse(randomString.contains("\r"), "String should not contain carriage returns");
+    }
     @Test
     public void testIsShortUrlUniqueWithUniqueURL() {
         UserServices userServices = mock(UserServices.class);
