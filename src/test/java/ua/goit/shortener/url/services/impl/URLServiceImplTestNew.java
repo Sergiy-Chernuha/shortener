@@ -152,8 +152,6 @@ class URLServiceImplTestNew {
 
         assertTrue(isActive);
 
-//        verify(urlService, times(1)).isActiveShortURL(activeURL);
-//        verifyNoMoreInteractions(urlService);
     }
 
     @Test
@@ -172,8 +170,6 @@ class URLServiceImplTestNew {
         boolean isActive = urlService.isActiveShortURL(expiredURL);
 
         assertFalse(isActive);
-//        verify(urlService, times(1)).isActiveShortURL(expiredURL);
-//        verifyNoMoreInteractions(urlService);
     }
 
     @Test
