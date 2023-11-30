@@ -9,18 +9,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.repositories.URLRepository;
-import ua.goit.shortener.user.services.UserServices;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @WebMvcTest(CrudUrlServiceImpl.class)
 class CrudUrlServiceImplTest {
@@ -102,6 +98,7 @@ class CrudUrlServiceImplTest {
 
         verify(urlRepository, times(1)).deleteById(shortURLToDelete);
     }
+
     @Test
     public void testUpdateURL() {
         URLRepository urlRepository = mock(URLRepository.class);

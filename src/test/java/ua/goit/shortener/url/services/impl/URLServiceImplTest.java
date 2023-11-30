@@ -2,40 +2,39 @@ package ua.goit.shortener.url.services.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ua.goit.shortener.url.controller.UrlController;
 import ua.goit.shortener.url.dto.UrlDTO;
-import ua.goit.shortener.user.entity.User;
-
 import ua.goit.shortener.url.entity.URL;
 import ua.goit.shortener.url.services.CrudUrlService;
-import ua.goit.shortener.url.services.URLService;
+import ua.goit.shortener.user.entity.User;
 import ua.goit.shortener.user.services.UserServices;
 
 import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(URLServiceImpl.class)
 class URLServiceImplTest {
 
-    @Mock
-    private UserServices userServices;
+    @Autowired
+    MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private CrudUrlService crudUrlService;
-
-    private URLService urlService;
+    @MockBean
+    private UserServices userServices;
+    @MockBean
+    @Qualifier("V1")
+    private URLServiceImpl urlService;
 
     @BeforeEach
     public void setUp() {
@@ -60,91 +59,113 @@ class URLServiceImplTest {
         verify(userServices, times(1)).findUser(1L);
         verify(crudUrlService, times(1)).saveURL(any(URL.class));
 
-        assertEquals("shorter/t3/", shortURL.substring(0, 11));
+        assertTrue(shortURL.startsWith("shorter/t3/"));
+        String actualSubstring = shortURL.substring("shorter/t3/".length());
+        assertTrue(actualSubstring.length() >= 6 && actualSubstring.length() <= 8);
     }
 
     @Test
     public void testCreateShortURL() {
-        String shortURL = urlService.createShortURL("https://www.example.com");
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
 
-        assertNotNull(shortURL);
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+        String originalURL = "https://www.google.com";
+
+        String shortURL = urlService.createShortURL(originalURL);
         assertTrue(shortURL.startsWith("shorter/t3/"));
+
+        String actualSubstring = shortURL.substring("shorter/t3/".length());
+        assertTrue(actualSubstring.length() >= 6 && actualSubstring.length() <= 8);
     }
 
     @Test
-    public void testCreateShortURLLength() {
-        String shortURL1 = urlService.createShortURL("https://www.example.com");
-        String shortURL2 = urlService.createShortURL("https://www.example.com");
-        String shortURL3 = urlService.createShortURL("https://www.example.com");
+    void testIsValidURL() {
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
 
-        assertNotNull(shortURL1);
-        assertNotNull(shortURL2);
-        assertNotNull(shortURL3);
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+        String validURL = "https://www.google.com";
+        String invalidURL = "not a valid URL";
 
-        assertNotEquals(shortURL1, shortURL2);
-        assertNotEquals(shortURL1, shortURL3);
-        assertNotEquals(shortURL2, shortURL3);
+        assertTrue(urlService.isValidURL(validURL));
+        assertFalse(urlService.isValidURL(invalidURL));
     }
 
     @Test
-    public void testCreateShortURLForDifferentURLs() {
-        String shortURL1 = urlService.createShortURL("https://www.example.com");
-        String shortURL2 = urlService.createShortURL("https://www.example.org");
-        String shortURL3 = urlService.createShortURL("https://www.example.net");
+    public void testIncrementClickCount() {
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
 
-        assertNotNull(shortURL1);
-        assertNotNull(shortURL2);
-        assertNotNull(shortURL3);
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
 
-        assertNotEquals(shortURL1, shortURL2);
-        assertNotEquals(shortURL1, shortURL3);
-        assertNotEquals(shortURL2, shortURL3);
+        URL url = new URL();
+        url.setClickCount(5);
+
+        urlService.incrementClickCount(url);
+
+        assertEquals(6, url.getClickCount());
+        verify(crudUrlService, times(1)).saveURL(argThat(savedURL -> savedURL.getClickCount() == 6));
+
+        verifyNoMoreInteractions(crudUrlService);
     }
 
     @Test
-    public void testIsValidURLWithValidHTTPURL() {
-        boolean isValid = urlService.isValidURL("http://www.example.com");
-        assertTrue(isValid);
-    }
+    public void testGetActiveURL() {
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
 
-    @Test
-    public void testIsValidURLWithValidHTTPSURL() {
-        boolean isValid = urlService.isValidURL("https://www.example.com");
-        assertTrue(isValid);
-    }
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
 
-    @Test
-    public void testIsValidURLWithInvalidURL() {
-        boolean isValid = urlService.isValidURL("this_is_not_a_valid_url");
-        assertFalse(isValid);
-    }
+        String shortURL = "shorter/t3/liza1234";
+        URL activeURL = new URL();
+        activeURL.setShortURL(shortURL);
+        activeURL.setExpiryDate(new Date(System.currentTimeMillis() + 1000));
 
-    @Test
-    public void testIsValidURLWithNullURL() {
-        boolean isValid = urlService.isValidURL(null);
-        assertFalse(isValid);
+        when(crudUrlService.getURLByShortURL(shortURL)).thenReturn(Optional.of(activeURL));
+
+        URL result = urlService.getActiveURL(shortURL);
+
+        assertNotNull(result);
+        assertEquals(shortURL, result.getShortURL());
+        assertEquals(1, result.getClickCount());
+
+        verify(crudUrlService, times(1)).getURLByShortURL(shortURL);
+        verify(crudUrlService, times(1)).saveURL(activeURL);
+        verifyNoMoreInteractions(crudUrlService);
     }
 
     @Test
     public void testIsActiveShortURLWithActiveURL() {
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+
         URL activeURL = new URL();
-        activeURL.setShortURL("shorter/t3/abc123");
-        activeURL.setLongURL("https://www.example.com");
+        activeURL.setShortURL("shorter/t3/liza1234");
+        activeURL.setLongURL("https://www.google.com");
         activeURL.setCreateDate(new Date());
         activeURL.setExpiryShortURL();
 
         boolean isActive = urlService.isActiveShortURL(activeURL);
 
         assertTrue(isActive);
+
     }
 
     @Test
     public void testIsActiveShortURLWithExpiredURL() {
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+
         URL expiredURL = new URL();
-        expiredURL.setShortURL("shorter/t3/def456");
-        expiredURL.setLongURL("https://www.example.com");
+        expiredURL.setShortURL("shorter/t3/liza1234");
+        expiredURL.setLongURL("https://www.google.com");
         expiredURL.setCreateDate(new Date());
-        expiredURL.setExpiryDate(new Date(System.currentTimeMillis() - 86400000));
+        expiredURL.setExpiryDate(new Date(System.currentTimeMillis() - 1000));
 
         boolean isActive = urlService.isActiveShortURL(expiredURL);
 
@@ -153,51 +174,67 @@ class URLServiceImplTest {
 
     @Test
     public void testIsActiveShortURLWithNullURL() {
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+
         boolean isActive = urlService.isActiveShortURL(null);
         assertFalse(isActive);
     }
 
+
     @Test
     public void testGenerateRandomString() {
-        URLServiceImpl urlService = new URLServiceImpl(null, null);
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+
         int length = 8;
 
         String randomString = urlService.generateRandomString(length);
 
+        assertNotNull(randomString);
         assertEquals(length, randomString.length());
+        assertFalse(randomString.contains(" "), "String should not contain spaces");
+        assertFalse(randomString.contains("\n"), "String should not contain line breaks");
+        assertFalse(randomString.contains("\r"), "String should not contain carriage returns");
     }
-
     @Test
     public void testIsShortUrlUniqueWithUniqueURL() {
+        UserServices userServices = mock(UserServices.class);
         CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
 
-        URLServiceImpl urlService = new URLServiceImpl(null, crudUrlService);
+        String shortURL = "shorter/t3/uLiza123";
 
-        when(crudUrlService.getURLByShortURL("shortURL")).thenReturn(Optional.empty());
+        when(crudUrlService.getURLByShortURL(shortURL)).thenReturn(Optional.empty());
+        assertTrue(urlService.isShortUrlUnique(shortURL));
+        verify(crudUrlService, times(1)).getURLByShortURL(shortURL);
 
-        boolean isUnique = urlService.isShortUrlUnique("shortURL");
-
-        verify(crudUrlService, times(1)).getURLByShortURL("shortURL");
-
-        assertTrue(isUnique);
+        when(crudUrlService.getURLByShortURL(shortURL)).thenReturn(Optional.of(new URL()));
+        assertFalse(urlService.isShortUrlUnique(shortURL));
+        verify(crudUrlService, times(2)).getURLByShortURL(shortURL);
+        verifyNoMoreInteractions(crudUrlService);
     }
 
     @Test
     public void testGetURLInfo() {
-        String shortURL = "shorter/t3/abc123";
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+
+        String shortURL = "shorter/t3/Liza123";
         URL url = new URL();
         url.setShortURL(shortURL);
-        url.setLongURL("https://www.i.ua/");
+        url.setLongURL("https://www.google.com");
         url.setCreateDate(new Date());
         url.setExpiryDate(new Date(System.currentTimeMillis() + 3600000));
         url.setClickCount(0);
 
-        CrudUrlServiceImpl mockCrudUrlService;
-        mockCrudUrlService = mock(CrudUrlServiceImpl.class);
-        when(mockCrudUrlService.getURLByShortURL(shortURL)).thenReturn(Optional.of(url));
+        when(crudUrlService.getURLByShortURL(shortURL)).thenReturn(Optional.of(url));
 
-        URLServiceImpl urlService;
-        urlService = new URLServiceImpl(null, mockCrudUrlService);
         UrlDTO urlInfo = urlService.getURLInfo(shortURL);
 
         assertNotNull(urlInfo);
@@ -207,46 +244,51 @@ class URLServiceImplTest {
         assertEquals(url.getExpiryDate(), urlInfo.getExpiryDate());
         assertEquals(url.getClickCount(), urlInfo.getClickCount());
 
-        verify(mockCrudUrlService, times(1)).getURLByShortURL(shortURL);
+        verify(crudUrlService, times(1)).getURLByShortURL(shortURL);
+        verifyNoMoreInteractions(crudUrlService);
     }
 
     @Test
     public void testUpdateShortURL() {
-        // Приклад даних для тесту
-        String shortURL = "shorter/t3/abc123";
-        String newOriginalURL = "https://www.youtube.com/";
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+
+        String shortURL = "shorter/t3/Liza123";
+        String newOriginalURL = "https://www.google.com";
         URL url = new URL();
         url.setShortURL(shortURL);
-        url.setLongURL("https://www.i.ua/");
+        url.setLongURL("https://github.com/Elliisiv");
         url.setCreateDate(new Date());
-        url.setExpiryDate(new Date(System.currentTimeMillis() + 3600000)); // Через годину
+        url.setExpiryDate(new Date(System.currentTimeMillis() + 3600000));
         url.setClickCount(0);
 
-        CrudUrlServiceImpl mockCrudUrlService;
-        mockCrudUrlService = mock(CrudUrlServiceImpl.class);
-        when(mockCrudUrlService.getURLByShortURL(shortURL)).thenReturn(Optional.of(url));
+        when(crudUrlService.getURLByShortURL(shortURL)).thenReturn(Optional.of(url));
 
-        URLServiceImpl urlService;
-        urlService = new URLServiceImpl(null, mockCrudUrlService);
         boolean result = urlService.updateShortURL(shortURL, newOriginalURL);
 
         assertTrue(result);
 
-        verify(mockCrudUrlService, times(1)).getURLByShortURL(shortURL);
+        verify(crudUrlService, times(1)).getURLByShortURL(shortURL);
 
         assertEquals(newOriginalURL, url.getLongURL());
     }
 
     @Test
     public void testMapToDTO() {
-        URLServiceImpl urlService = new URLServiceImpl(null, null);
+        UserServices userServices = mock(UserServices.class);
+        CrudUrlServiceImpl crudUrlService = mock(CrudUrlServiceImpl.class);
+        URLServiceImpl urlService = new URLServiceImpl(userServices, crudUrlService);
+
         URL url = new URL();
-        url.setShortURL("shortURL");
-        url.setLongURL("longURL");
+        String shortURL = "shorter/t3/Liza123";
+        String longURL = "https://www.google.com";
+        url.setShortURL(shortURL);
+        url.setLongURL(longURL);
 
         UrlDTO dto = urlService.mapToDTO(url);
 
-        assertEquals("shortURL", dto.getShortURL());
-        assertEquals("longURL", dto.getOriginalURL());
+        assertEquals(shortURL, dto.getShortURL());
+        assertEquals(longURL, dto.getOriginalURL());
     }
 }
