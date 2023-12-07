@@ -38,6 +38,9 @@ public class URL {
     public URL() {
     }
 
+    public URL(String url, String shortURL, boolean b) {
+    }
+
     public void setExpiryShortURL() {
         // Встановлюємо термін придатності на 2 доби від поточної дати створення
         LocalDateTime newExpiryDate = LocalDateTime.ofInstant(createDate.toInstant(), ZoneId.systemDefault()).plusDays(2);
